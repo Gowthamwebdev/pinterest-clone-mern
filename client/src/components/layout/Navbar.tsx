@@ -22,7 +22,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center px-4 py-2 bg-white">
+    <div className="w-full top-0 flex justify-between items-center px-4 py-2 bg-white">
       <div className="flex items-center bg-gray-100 px-4 rounded-lg w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
