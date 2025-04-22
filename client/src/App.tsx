@@ -1,25 +1,27 @@
-import Navbar from "./components/Navbar";
-import { Routes, Route } from "react-router-dom";
-import Notifications from "./pages/Notifications";
-import CreatePost from "./pages/CreatePost";
-import Sidebar from "./components/Sidebar";
+import Navbar from "./components/layout/Navbar";
+import Sidebar from "./components/layout/Sidebar";
+import Notifications from "./components/ui/Notifications";
+import AppRoutes from "./routes/AppRoutes";
+import { useState } from "react";
+import SidebarOptions from "./components/layout/SidebarOptions";
 
 function App() {
+  const [notification, setNotification] = useState(false);
+  const [setting, setSetting] = useState(false);
+
   return (
     <div className="flex h-screen">
-      <div className="w-[5vw] bg-gray-100">
-        <Sidebar />
+      <div className="w-[5vw] bg-white border-r mt-5 border-gray-200">
+        <Sidebar setNotification={setNotification} setSetting={setSetting} />
       </div>
-
       <div className="flex flex-col flex-1">
         <Navbar />
         <div className="flex-1 p-4 overflow-auto">
-          <Routes>
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/new-story" element={<CreatePost />} />
-          </Routes>
+          <AppRoutes />
         </div>
       </div>
+      {notification && <Notifications setNotification={setNotification} />}
+      {setting && <SidebarOptions setSetting={setSetting} />}
     </div>
   );
 }

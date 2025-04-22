@@ -1,6 +1,7 @@
 import React from 'react';
 import { Avatar, Menu, MenuItem, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { FiChevronDown } from "react-icons/fi";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,8 +23,7 @@ const Navbar = () => {
 
   return (
     <div className="w-full flex justify-between items-center px-4 py-2 bg-white">
-      {/* Full-width Search Input */}
-      <div className="flex items-center bg-gray-100 px-4  rounded-full w-full">
+      <div className="flex items-center bg-gray-100 px-4 rounded-lg w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -37,13 +37,15 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
-            className="ml-2 w-full py-2 bg-transparent outline-none text-sm text-gray-700"
+            className="ml-2 w-full py-4 bg-transparent rounded-sm outline-none text-gray-900 text-sm "
           />
         </div>
 
-      {/* Avatar Dropdown */}
       <IconButton onClick={handleAvatarClick} size="small" sx={{ ml: 2 }}>
         <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
+        <div className='ml-2 text-gray-700 font-semibold'>
+          <FiChevronDown size={20} />
+        </div>
       </IconButton>
       <Menu
         anchorEl={anchorEl}
