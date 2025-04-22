@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router-dom";
+import Login from "../components/Login";
 import CreatePost from "../pages/CreatePost";
 import Explore from "../pages/Explore";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
 import Settings from "../pages/Settings";
 
 const AppRoutes = () => {
