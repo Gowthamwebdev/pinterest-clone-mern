@@ -1,7 +1,8 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Explore from "../pages/Explore";
+import { Route, Routes } from "react-router-dom";
 import CreatePost from "../pages/CreatePost";
+import Explore from "../pages/Explore";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
 import Settings from "../pages/Settings";
 
 const AppRoutes = () => {
@@ -11,6 +12,7 @@ const AppRoutes = () => {
       <Route path="/today" element={<Explore />} />
       <Route path="/settings" element={<Settings/>} />
       <Route path="/pin-creation-tool" element={<CreatePost />} />
+      <Route path="/login" element={<Login />}/>
     </Routes>
   );
 };

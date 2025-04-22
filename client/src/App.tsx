@@ -1,9 +1,9 @@
+import { useState } from "react";
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
+import SidebarOptions from "./components/layout/SidebarOptions";
 import Notifications from "./components/ui/Notifications";
 import AppRoutes from "./routes/AppRoutes";
-import { useState } from "react";
-import SidebarOptions from "./components/layout/SidebarOptions";
 
 function App() {
   const [notification, setNotification] = useState(false);
