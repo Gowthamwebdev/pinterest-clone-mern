@@ -18,7 +18,7 @@ const LoginForm: React.FC = () => {
           '&:hover': { backgroundColor: '#ad081b' },
         }}
       >
-        Log in
+        Login
       </Button>
     </Box>
   );
