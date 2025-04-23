@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Notifications = ({ setNotification }: { setNotification: (val: boolean) => void }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -41,6 +42,7 @@ const Notifications = ({ setNotification }: { setNotification: (val: boolean) =>
           <p className="text-sm w-max-xs">
             Try exploring your home feed, creating a board or following someone with ideas that inspire you.
           </p>
+          <Link to={'/'} onClick={() => setNotification(false)} className="bg-gray-200 mt-2 p-3 rounded-3xl text-black ">Go to home feed</Link>
         </div>
       )}
     </div>

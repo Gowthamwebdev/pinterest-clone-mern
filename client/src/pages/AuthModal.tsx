@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import './AuthModal.css'
 import LoginForm from './Login'
 import SignupForm from './Signup'
 
