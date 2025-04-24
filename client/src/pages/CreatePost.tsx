@@ -1,14 +1,15 @@
+// pages/CreatePost.tsx
+'use client';
+
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Divider } from '@mui/material';
-import { FiArrowUpCircle } from 'react-icons/fi';
+import { Divider, Typography, Button } from '@mui/material';
+import AddPinForm from '../components/form/AddPinForm';
 import { usePinStore } from '../stores/pinStore';
 
-const CreatePost = () => {
-  const [image, setImage] = useState<File | null>(null);
+const CreatePost: React.FC = () => {
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
   const {
-    imgUrl,
     title,
     desc,
     tags,
@@ -21,16 +22,16 @@ const CreatePost = () => {
   } = usePinStore();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      const previewURL = URL.createObjectURL(file);
-      setImagePreview(previewURL);
-    }
+    const file = e.target.files?.[0] ?? null;
+    if (!file) return;
+    setImageFile(file);
+    const url = URL.createObjectURL(file);
+    setImagePreview(url);
+    setImgUrl(url);   
   };
 
   const handlePublish = () => {
-    if (!image) {
+    if (!imageFile) {
       alert('Please upload an image before publishing.');
       return;
     }
@@ -40,9 +41,8 @@ const CreatePost = () => {
       desc,
       tags,
       board,
-      image,
+      image: imageFile,
     };
-
     console.log('Post Payload:', postPayload);
 
     setTitle('');
@@ -50,101 +50,35 @@ const CreatePost = () => {
     setTags('');
     setBoard('');
     setImgUrl('');
-    setImage(null);
+    setImageFile(null);
     setImagePreview(null);
   };
 
   return (
     <div className="flex flex-col w-full h-full border-t border-t-gray-300 rounded-lg p-4 gap-4 bg-white">
-      <div className="w-full flex justify-between flex-row border-b border-gray-200 pb-3">
-        <Typography variant="h5" fontWeight="bold">
-          Create Pin
-        </Typography>
-        <Button variant="contained" color="error" 
+      <div className="w-full flex justify-between items-center border-b border-gray-200 pb-3">
+        <Typography variant="h5" fontWeight="bold">Create Pin</Typography>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={handlePublish}
           sx={{
-                paddingX: 4, 
-                paddingY: 1.5,
-                boxShadow: 'none', 
-                borderRadius: 6,
-                textTransform: 'none',
-              }} onClick={handlePublish}>
+            px: 4,
+            py: 1.5,
+            boxShadow: 'none',
+            borderRadius: 6,
+            textTransform: 'none',
+            '&:hover': { boxShadow: 'none' },
+          }}
+        >
           Publish
         </Button>
       </div>
-
-      <div className="flex flex-col lg:flex-row gap-6 w-full h-full">
-        <div className="w-full lg:w-[40%] flex flex-col justify-between items-center gap-2 rounded-xl px-4 py-6">
-          <div className="w-3/4 h-full flex items-center justify-center rounded-3xl border-2 border-dashed border-gray-300 bg-gray-200">
-            {!imagePreview ? (
-              <div className="flex w-full flex-col items-center justify-center h-full">
-                <FiArrowUpCircle size={50} className="text-gray-900 mb-4" />
-                <label htmlFor="image-upload" className="text-center cursor-pointer text-gray-700">
-                  <span className="font-medium">Choose a file or drag and drop it here</span>
-                  <input
-                    type="file"
-                    id="image-upload"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </label>
-                <Typography variant="caption" className="text-gray-500 text-center mt-2">
-                  High-quality .jpg under 20MB or .mp4 under 200MB.
-                </Typography>
-              </div>
-            ) : (
-              <img
-                src={imagePreview}
-                alt="Uploaded"
-                className="w-full h-full object-contain rounded-xl"
-              />
-            )}
-          </div>
-
-          <Divider className="w-3/4 my-2" />
-
-          <div className="w-3/4 text-center">
-          <Button variant="outlined" fullWidth sx={{ boxShadow: 'none', borderRadius: 2 }}>
-            Save from URL
-          </Button>
-
-          </div>
-        </div>
-
-        <form className="w-full lg:w-[55%] flex flex-col gap-5">
-          <TextField
-            label="Title"
-            placeholder="Add a title"
-            variant="outlined"
-            fullWidth
-            disabled={!imagePreview}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <TextField
-            label="Description"
-            placeholder="Add a detailed description"
-            multiline
-            rows={4}
-            variant="outlined"
-            fullWidth
-            disabled={!imagePreview}
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-          />
-          <TextField
-            label="Tags"
-            placeholder="e.g. design, UX"
-            fullWidth
-            disabled={!imagePreview}
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
-          <Typography variant="caption" color="textSecondary">
-            Don’t worry, people won’t see your tags
-          </Typography>
-        </form>
-      </div>
+      <Divider className="w-full my-4" />
+      <AddPinForm
+        imagePreview={imagePreview}
+        onImageChange={handleImageChange}
+      />
     </div>
   );
 };
