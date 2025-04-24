@@ -4,22 +4,19 @@ import React from 'react';
 const LoginForm: React.FC = () => {
   return (
     <Box>
+      <Typography textAlign= "left">
+      <h1 >Email</h1>
       <TextField fullWidth margin="normal" label="Email" />
-      <TextField fullWidth margin="normal" label="Password" type="password" />
-      <Typography textAlign="right">
-        Forgot your password?
       </Typography>
-      <Button
-        fullWidth
-        variant="contained"
-        sx={{
-          mt: 2,
-          backgroundColor: '#e60023',
-          '&:hover': { backgroundColor: '#ad081b' },
-        }}
-      >
-        Login
-      </Button>
+      <Typography textAlign= "left">
+      <h1>Password</h1>
+      <TextField fullWidth margin="normal" label="Password" type="password" />
+      </Typography>
+      <Typography textAlign="left">
+      <a href="/reset-password" className="text-blue-600 hover:underline">
+        <h1>Forgot your password?</h1>
+        </a>
+      </Typography>
     </Box>
   );
 };
