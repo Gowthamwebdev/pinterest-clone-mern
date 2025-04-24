@@ -31,6 +31,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
           onClick={onClose}
           className="absolute top-3 right-4 text-gray-600 text-xl focus:outline-none hover:text-gray-800"
         >
+          ×
         </button>
 
         {/* Pinterest Logo */}
@@ -42,17 +43,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 
         {/* Heading */}
         <h4 className="text-xl font-bold mb-6 text-gray-800">
-        Login in to see more
+          Login in to see more
         </h4>
 
         {/* Form Section */}
         {isLogin ? <LoginForm /> : <SignupForm />}
+        
         {isLogin &&(
-          <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
-          onClick={()=>setIsLogin(true)}>
-          Login
+            <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
+            onClick={()=>setIsLogin(true)}>
+            Login
           </button>
-  )}
+        )}
 
         {isLogin && (
   <div className="flex items-center my-3">
@@ -73,6 +75,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
           Create account
           </button>
       )}
+
 {/* OR Divider - Positioned between buttons */}
 {!isLogin && (
   <div className="flex items-center my-3">
@@ -80,7 +83,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     <span className="mx-3 text-sm font-medium text-gray-500">OR</span>
     <div className="flex-grow border-t border-gray-300"></div>
   </div>
- )}
+)}
 
 {/* Log in to Existing Account Button (Signup Page) */}
 {!isLogin && (
@@ -105,7 +108,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     </motion.div>
     </div>
 </div>
-
 
   );
 };

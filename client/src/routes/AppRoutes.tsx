@@ -4,7 +4,7 @@ import Explore from "../pages/Explore";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Settings from "../pages/Settings";
-
+import ResetPasswordForm from "../components/form/ResetPasswordForm";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -13,6 +13,7 @@ const AppRoutes = () => {
       <Route path="/settings" element={<Settings/>} />
       <Route path="/pin-creation-tool" element={<CreatePost />} />
       <Route path="/login" element={<Login />}/>
+      <Route path="/ResetPasswordForm" element={<ResetPasswordForm/>}/>
     </Routes>
   );
 };
