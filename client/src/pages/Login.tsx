@@ -2,7 +2,6 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserStore } from '../stores/userStore/userStore';
-import apiClient from '../api/apiClient';
 import Cookies from 'js-cookie';
 import { userLoginApi } from '../api/authApi';
 
@@ -84,11 +83,6 @@ const LoginForm: React.FC = () => {
          <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
          </a>
         </Button>
-        </Typography>
-
-        </Box>
-);
-};
       <Typography textAlign="left">
         <Button onClick={() => navigate('/reset-password')}>
           <a href="/reset-password" className="text-black-300 hover:underline">
