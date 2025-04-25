@@ -10,7 +10,6 @@ type AuthModalProps = {
 
 const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
-
   return (
 <div className="fixed inset-0 backdrop-blur-md bg-white/30 flex items-center justify-center">
 <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -43,17 +42,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 
         {/* Heading */}
         <h4 className="text-xl font-bold mb-6 text-gray-800">
-         Login in to see more
+          Login in to see more
         </h4>
 
         {/* Form Section */}
         {isLogin ? <LoginForm /> : <SignupForm />}
+
         {isLogin &&(
-           <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
-           onClick={()=>setIsLogin(true)}>
-           Login
+            <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
+            onClick={()=>setIsLogin(true)}>
+            Login
           </button>
-       )} 
+        )}
 
         {isLogin && (
   <div className="flex items-center my-3">
@@ -68,12 +68,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     Continue with Google
   </button>
 )}
-       {!isLogin &&(
-           <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-20 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
-           onClick={()=>setIsLogin(true)}>
-           Create account
+      {!isLogin &&(
+          <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-20 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
+          onClick={()=>setIsLogin(true)}>
+          Create account
           </button>
-       )} 
+      )}
 
 {/* OR Divider - Positioned between buttons */}
 {!isLogin && (
@@ -113,3 +113,5 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 };
 
 export default AuthModal;
+
+
