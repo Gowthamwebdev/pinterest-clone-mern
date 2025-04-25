@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const isValidEmail = (email: string): boolean => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // Email validation regex
+  };
+  
   return (
     <Box>
       <Typography textAlign= "left">
@@ -17,13 +21,14 @@ const LoginForm: React.FC = () => {
       </Typography>
       <Typography textAlign="left">
         <Button
-        onClick={() => navigate("/reset-password")}
+        onClick={() => navigate("/password/reset")}
         >
-         <a href="/ResetPasswordForm" className="text-black-300 hover:underline">
-         <h1 className='text=black-200 hover:underline'>Forgot your password?</h1>
+         <a href="/password/reset" className="text-black normal-case hover:underline">
+         <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
          </a>
         </Button>
         </Typography>
+
         </Box>
 );
 };

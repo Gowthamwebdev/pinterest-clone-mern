@@ -69,7 +69,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
   </button>
 )}
       {!isLogin &&(
-          <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-20 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
+          <button className="mt-3 flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-20 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
           onClick={()=>setIsLogin(true)}>
           Create account
           </button>
