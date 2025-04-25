@@ -13,7 +13,7 @@ const AppRoutes = () => {
       <Route path="/settings" element={<Settings />} />
       <Route path="/pin-creation-tool" element={<CreatePost />} />
       <Route path="/login" element={<Login />}/>
-      <Route path="/ResetPasswordForm" element={<ResetPasswordForm/>} />
+      <Route path="/reset-password" element={<ResetPasswordForm/>} />
     </Routes>
   );
 };

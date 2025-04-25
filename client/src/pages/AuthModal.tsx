@@ -48,12 +48,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
         {/* Form Section */}
         {isLogin ? <LoginForm /> : <SignupForm />}
 
-        {isLogin &&(
-            <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
-            onClick={()=>setIsLogin(true)}>
-            Login
-          </button>
-        )}
 
         {isLogin && (
   <div className="flex items-center my-3">
@@ -94,7 +88,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
   </button>
 )}
         {/* Footer Section */}
-        <p className="text-sm mt-6 text-gray-500">
+        <div className="text-sm mt-6 text-gray-500">
           {isLogin ? "Don't have an account?" : "Already have an account?"}
           <button
             onClick={() => setIsLogin(!isLogin)}
@@ -103,23 +97,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
             {isLogin ? "Sign up" : "Login"}
             <div style={{ marginTop: '20px' }}>
               <button className="google-btn">Continue with Google</button>
-  <button
-    className="red-btn"
-    onClick={() => setIsLogin(true)}
-    style={{ marginBottom: '10px' }}
-  >
-    Log in
-  </button>
-  <button
-    className="google-btn"
-    onClick={() => setIsLogin(false)}
-  >
-    Sign up
-  </button>
-</div>
+              <button
+                className="red-btn"
+                onClick={() => setIsLogin(true)}
+                style={{ marginBottom: '10px' }}
+              >
+                Log in
+              </button>
+              <button
+                className="google-btn"
+                onClick={() => setIsLogin(false)}
+              >
+                Sign up
+              </button>
+              </div>
 
           </button>
-        </p>
+        </div>
       </motion.div>
     </motion.div>
     </div>
