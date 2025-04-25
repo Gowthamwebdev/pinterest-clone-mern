@@ -17,7 +17,7 @@
     "@tailwindcss/vite": "^4.1.4",
     "axios": "^1.8.4",
     "form": "^0.2.5",
-    "framer-motion": "^12.8.0",
+    "framer-motion": "^12.9.1",
     "lucide-react": "^0.503.0",
     "module-alias": "^2.2.3",
     "mui": "^0.0.1",

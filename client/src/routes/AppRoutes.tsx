@@ -11,13 +11,12 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/today" element={<Explore />} />
-      <Route path="/settings" element={<Settings/>} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/pin-creation-tool" element={<CreatePost />} />
       <Route path="/login" element={<Login />}/>
-      <Route path="/password/reset" element={<ResetPasswordForm/>}/>
+      <Route path="/reset-password" element={<ResetPasswordForm/>} />
       <Route path="/password/-reset" element={<ResetPage/>} />
     </Routes>
   );
 };
-
 export default AppRoutes;
