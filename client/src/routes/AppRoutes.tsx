@@ -10,9 +10,9 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/today" element={<Explore />} />
-      <Route path="/settings" element={<Settings/>} />
+      <Route path="/settings" element={<Settings />} />
       <Route path="/pin-creation-tool" element={<CreatePost />} />
-      <Route path="/login" element={<Login />}/>
+      <Route path="/auth/login" element={<Login />} />
     </Routes>
   );
 };
