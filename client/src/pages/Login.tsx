@@ -48,7 +48,6 @@ const LoginForm: React.FC = () => {
     }
   };
   
-
   return (
     <Box component="form" onSubmit={handleLogin}>
       <Typography textAlign="left">
@@ -61,7 +60,6 @@ const LoginForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </Typography>
-
       <Typography textAlign="left">
         <h1>Password</h1>
         <TextField
@@ -79,7 +77,18 @@ const LoginForm: React.FC = () => {
           {error}
         </Typography>
       )}
+        <Button
+        onClick={() => navigate("/password/reset")}
+        >
+         <a href="/password/reset" className="text-black normal-case hover:underline">
+         <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
+         </a>
+        </Button>
+        </Typography>
 
+        </Box>
+);
+};
       <Typography textAlign="left">
         <Button onClick={() => navigate('/reset-password')}>
           <a href="/reset-password" className="text-black-300 hover:underline">

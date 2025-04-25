@@ -26,12 +26,12 @@ const Signup: React.FC = () => {
       {errors.username && <span style={styles.error}>Username is required</span>}
       </Typography>
       <Typography textAlign="left">
-        <h1 className="text-xs font-normal">Email Address</h1>
+        <h1 className="text-xs font-normal ">Email Address</h1>
       <input type="email" placeholder="Email" {...register("email", { required: true })} />
       {errors.email && <span style={styles.error}>Email is required</span>}
       </Typography>
       <Typography textAlign="left">
-      <h1 className="text-xs font-normal">password</h1>
+      <h1 className="text-xs font-normal ">password</h1>
       <input type="password" placeholder="Password" {...register("password", { required: true })} />
       {errors.password && <span style={styles.error}>Password is required</span>}
       </Typography>
@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
 }
 
 const styles = {
-  form: { display: 'flex', flexDirection: 'column' as const, gap: '10px', maxWidth: '300px', margin: 'auto' },
+  form: { display: 'flex', flexDirection: 'column' as const, gap: '10px', maxWidth: '300px', mb: '2' },
   error: { color: 'red', fontSize: '12px' }
 }
 
