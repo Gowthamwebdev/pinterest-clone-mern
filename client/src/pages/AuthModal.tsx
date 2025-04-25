@@ -10,7 +10,6 @@ type AuthModalProps = {
 
 const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
   const [isLogin, setIsLogin] = useState(true);
-
   return (
 <div className="fixed inset-0 backdrop-blur-md bg-white/30 flex items-center justify-center">
 <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -48,7 +47,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 
         {/* Form Section */}
         {isLogin ? <LoginForm /> : <SignupForm />}
-        
+
         {isLogin &&(
             <button className="flex flex-col gap-2 max-w-full mx-auto bg-red-500 text-white px-29 py-1 rounded-full text-lg font-semibold hover:bg-red-600 transition"
             onClick={()=>setIsLogin(true)}>
@@ -109,7 +108,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
     </div>
 </div>
 
+
   );
 };
 
 export default AuthModal;
+
+

@@ -1,13 +1,10 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
-import ResetPasswordForm from "../components/page/resetPasswordForm"
+import { useNavigate } from "react-router-dom";
+
 
 const LoginForm: React.FC = () => {
-  function setShowReset(arg0: boolean): void {
-    const [showResetModal, setShowResetModal] = useState(false); 
-    throw new Error('Function not implemented.');
-  }
-
+  const navigate = useNavigate();
   return (
     <Box>
       <Typography textAlign= "left">
@@ -19,13 +16,18 @@ const LoginForm: React.FC = () => {
       <TextField fullWidth margin="normal" label="Password" type="password" />
       </Typography>
       <Typography textAlign="left">
-      <a href="/reset-password" className="text-black-600 hover:underline">
-      <Button onClick={() => setShowReset(true)} color="secondary"></Button>
-        <h1 className="text-xs font-normal" >Forgot your password?</h1>
-        </a>
-      </Typography>
-    </Box>
-  );
+        <Button
+        onClick={() => navigate("/reset-password")}
+        >
+         <a href="/ResetPasswordForm" className="text-black-300 hover:underline">
+         <h1 className='text=black-200 hover:underline'>Forgot your password?</h1>
+         </a>
+        </Button>
+        </Typography>
+        </Box>
+);
 };
 
 export default LoginForm;
+
+
