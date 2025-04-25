@@ -1,7 +1,10 @@
 import { Box, TextField, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 const LoginForm: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <Box>
       <Typography textAlign= "left">
@@ -13,12 +16,18 @@ const LoginForm: React.FC = () => {
       <TextField fullWidth margin="normal" label="Password" type="password" />
       </Typography>
       <Typography textAlign="left">
-      <a href="/reset-password" className="text-blue-600 hover:underline">
-        <h1>Forgot your password?</h1>
-        </a>
-      </Typography>
-    </Box>
-  );
+        <Button
+        onClick={() => navigate("/reset-password")}
+        >
+         <a href="/ResetPasswordForm" className="text-black-300 hover:underline">
+         <h1 className='text=black-200 hover:underline'>Forgot your password?</h1>
+         </a>
+        </Button>
+        </Typography>
+        </Box>
+);
 };
 
 export default LoginForm;
+
+
