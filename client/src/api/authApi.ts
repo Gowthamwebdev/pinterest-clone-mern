@@ -18,6 +18,15 @@
     }
   };
 
+  export const fetchUserProfileApi = async () => {
+    try {
+      const response = await apiClient.get('/auth/profile');
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Failed to fetch profile');
+    }
+  };
+
   export const userSignupApi = async (userData: userType) => {
     try {
       const response = await apiClient.post('/auth/signup', userData);

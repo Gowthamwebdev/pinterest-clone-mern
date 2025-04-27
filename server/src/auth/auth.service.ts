@@ -1,72 +1,78 @@
-import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/users/users.service';
+// src/auth/auth.service.ts
+import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 import { LoginDto, SignupDto } from './dto/auth.dto';
-dotenv.config();
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UserService,
-    private readonly prisma: PrismaService
+    private prisma: PrismaService,
+    private jwtService: JwtService
   ) {}
-   async userLogin(userData: LoginDto) {
-    const { email, password } = userData;
-    const user = await this.prisma.user.findUnique({where: { email }});
+
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
-    const isValidPassword = await bcrypt.compare(password, user.password);
 
-    if (!isValidPassword) throw new UnauthorizedException('Invalid password');
+    const isValid = await bcrypt.compare(pass, user.password);
+    if (!isValid) throw new UnauthorizedException('Invalid password');
 
-    const accessToken = jwt.sign(
-      {userId: user.id},
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    )  
-    return {
-      message: 'Login successful',
-      accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        profile_img: user.profile_img,
-      },
-    };
-    
+    return user;
   }
 
-  async userSignUp(userData: SignupDto): Promise<any> {
-    const { name, email, password, profile_img } = userData;
-    const user = await this.prisma.user.findUnique({where: { email }});
-    if (user) {
-      throw new UnauthorizedException('User already exists');
+  async login(userData: LoginDto) {
+    const user = await this.validateUser(userData.email, userData.password);
+    const payload = { userId: user.id };
+    
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
+
+  async getUserProfile(userId: number) {
+    console.log('Fetching profile for user ID:', userId);
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        profile_img: true,
+      }
+    });
+    
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
     
-    const hashedPassword = await bcrypt.hash(password, 10);
-  
-    const createdUser = await this.prisma.user.create({
+    return user;
+  }
+
+  async signUp(userData: SignupDto) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: userData.email },
+    });
+
+    if (existingUser) {
+      throw new UnauthorizedException('User already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const user = await this.prisma.user.create({
       data: {
-        name: name,
-        email: email,
+        name: userData.name,
+        email: userData.email,
         password: hashedPassword,
-        profile_img: profile_img || 'null',
+        profile_img: userData.profile_img || '',
       },
     });
-  
+
+    const { password, ...result } = user;
     return {
       message: 'User created successfully',
-      user: {
-        id: createdUser.id,
-        email: createdUser.email,
-        name: createdUser.name,
-        profile_img: createdUser.profile_img,
-      },
+      user: result
     };
-    
   }
 }

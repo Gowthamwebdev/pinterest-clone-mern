@@ -1,29 +1,23 @@
-import { useMutation } from '@tanstack/react-query';
-import { userLoginApi, userSignupApi } from '../../api/authApi';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { userLoginApi, userSignupApi, fetchUserProfileApi } from '../../api/authApi';
 import { useUserStore } from '../../stores/userStore/userStore';
 import { useAuthStore } from '../../stores/AuthStore';
 import Cookies from 'js-cookie';
 
 export const useLoginMutation = () => {
-  const { setUserId, setName, setEmail, setProfileImg } = useUserStore();
   const { setAccessToken, setIsAuthenticated } = useAuthStore();
+  const profileQuery = useUserProfileQuery();
 
   return useMutation({
     mutationFn: userLoginApi,
-    onSuccess: (data) => {
-      const { accessToken, user } = data;
-
-      setUserId(user.id.toString());
-      setName(user.name);
-      setEmail(user.email);
-      setProfileImg(user.profile_img !== 'null' ? user.profile_img : '');
-
-      setAccessToken(accessToken);
+    onSuccess: async (data) => {
+      const { token } = data;
+      
+      setAccessToken(token);
       setIsAuthenticated(true);
-
-      Cookies.set('token', accessToken, { expires: 0.1 });
-
-      console.log('Login success:', data);
+      Cookies.set('token', token, { expires: 1 });
+      console.log('logged in...')
+      await profileQuery.refetch();
     },
     onError: (error) => {
       console.error('Login error:', error);
@@ -31,26 +25,36 @@ export const useLoginMutation = () => {
   });
 };
 
-export const useSignupMutation = () => {
+export const useUserProfileQuery = () => {
   const { setUserId, setName, setEmail, setProfileImg } = useUserStore();
-  const { setAccessToken, setIsAuthenticated } = useAuthStore();
+
+  return useQuery({
+    queryKey: ['userProfile'],
+    queryFn: async () => {
+      const user = await fetchUserProfileApi();
+      setUserId(user.id);
+      setName(user.name);
+      setEmail(user.email);
+      setProfileImg(user.profile_img || '');
+      console.log(user)
+      return user;
+    },
+    enabled: false,
+    retry: false,
+  });
+};
+export const useSignupMutation = () => {
+  const { setIsAuthenticated } = useAuthStore();
 
   return useMutation({
     mutationFn: userSignupApi,
     onSuccess: (data) => {
-      const { accessToken, user } = data;
-
-      setUserId(user.id.toString());
-      setName(user.name);
-      setEmail(user.email);
-      setProfileImg(user.profile_img !== 'null' ? user.profile_img : '');
-
-      setAccessToken(accessToken);
+      const { access_token } = data;
+      
       setIsAuthenticated(true);
+      Cookies.set('token', access_token, { expires: 1 });
 
-      Cookies.set('token', accessToken, { expires: 0.1 });
-
-      console.log('Signup success:', data);
+      console.log('Signup success - token stored');
     },
     onError: (error) => {
       console.error('Signup error:', error);

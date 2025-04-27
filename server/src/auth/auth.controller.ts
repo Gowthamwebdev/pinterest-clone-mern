@@ -1,21 +1,28 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+// src/auth/auth.controller.ts
+import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, SignupDto } from './dto/auth.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @Post('login')
-  @UsePipes(new ValidationPipe())
-  userLogin(@Body() loginDto: LoginDto) {
-    return this.authService.userLogin(loginDto);
+  @UseGuards(LocalAuthGuard)
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async getProfile(@Request() req) {
+    return this.authService.getUserProfile(req.user.userId);
   }
 
   @Post('signup')
-  @UsePipes(new ValidationPipe())
-  userSignUp(@Body() signupDto: SignupDto) {
-    const userData = { ...signupDto, user_id: 'generated_user_id' };
-    return this.authService.userSignUp(userData);
+  async signUp(@Body() signupDto: SignupDto) {
+    return this.authService.signUp(signupDto);
   }
 }

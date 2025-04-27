@@ -9,13 +9,7 @@ const LoginForm: React.FC = () => {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword
-  } = useUserStore();
-
+  const { email, setEmail, password, setPassword } = useUserStore();
   const loginMutation = useLoginMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -27,7 +21,7 @@ const LoginForm: React.FC = () => {
       await loginMutation.mutateAsync({ email, password });
       navigate('/');
     } catch (err) {
-      setError('Invalid email or password');
+      setError(err instanceof Error ? err.message : 'Invalid email or password');
     } finally {
       setLoading(false);
     }
@@ -43,6 +37,7 @@ const LoginForm: React.FC = () => {
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </Typography>
 
@@ -55,6 +50,7 @@ const LoginForm: React.FC = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </Typography>
 

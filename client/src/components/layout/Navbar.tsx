@@ -3,11 +3,12 @@ import { Avatar, Menu, MenuItem, IconButton, Button, TextField } from '@mui/mate
 import { useNavigate } from 'react-router-dom';
 import { FiChevronDown } from 'react-icons/fi';
 import { useAuthStore } from '../../stores/AuthStore';
+import Cookies from 'js-cookie';
+import LogoutForm from '../form/LogoutFom';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  
-  const { isAuthenticated } = useAuthStore(); // <<< Get isAuthenticated from Zustand
+  const { isAuthenticated, resetAuth } = useAuthStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -24,18 +25,9 @@ const Navbar: React.FC = () => {
     handleMenuClose();
   };
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-  const handleSignupClick = () => {
-    navigate('/signup');
-  };
-
   return (
     <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0 z-10">
       
-      {/* Search Bar */}
       <div className="flex items-center bg-[#f5f5f5] px-2 py-0.5 rounded-lg flex-grow mr-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -58,11 +50,9 @@ const Navbar: React.FC = () => {
         />
       </div>
 
-      {/* Right Side */}
       <div className="flex items-center gap-4">
         {isAuthenticated ? (
           <>
-            {/* Avatar with Dropdown Menu */}
             <IconButton onClick={handleAvatarClick} size="small" sx={{ ml: 2 }}>
               <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
               <div className="ml-2 text-gray-700 font-semibold">
@@ -81,12 +71,11 @@ const Navbar: React.FC = () => {
             >
               <MenuItem onClick={() => handleNavigation('profile')}>Profile</MenuItem>
               <MenuItem onClick={() => handleNavigation('account')}>My Account</MenuItem>
-              <MenuItem onClick={() => handleNavigation('logout')}>Sign out</MenuItem>
+              <MenuItem onClick={handleMenuClose}><LogoutForm/></MenuItem>
             </Menu>
           </>
         ) : (
           <>
-            {/* Login and Signup Buttons */}
             <Button
               variant="text"
               sx={{
@@ -94,13 +83,13 @@ const Navbar: React.FC = () => {
                 fontWeight: "bold",
                 textTransform: 'none',
               }}
-              onClick={handleSignupClick}
+              onClick={() => handleNavigation('/signup')}
             >
               Signup
             </Button>
             <Button
               variant="outlined"
-              onClick={handleLoginClick}
+              onClick={() => handleNavigation('/login')}
               sx={{
                 backgroundColor: '#e60023',
                 '&:hover': { backgroundColor: '#ad081b' },
