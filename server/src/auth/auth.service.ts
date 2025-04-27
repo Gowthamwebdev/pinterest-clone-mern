@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UnauthorizedException, NotFoundException } from '@nestjs/common';
-import { SignupDto } from './dto/auth.dto';
+import { LoginDto, SignupDto } from './dto/auth.dto';
 dotenv.config();
 
 @Injectable()
@@ -14,10 +14,7 @@ export class AuthService {
     private userService: UserService,
     private readonly prisma: PrismaService
   ) {}
-   async userLogin(userData: {
-    email: string,
-    password: string
-   }) {
+   async userLogin(userData: LoginDto) {
     const { email, password } = userData;
     const user = await this.prisma.user.findUnique({where: { email }});
     if (!user) throw new NotFoundException('User not found');

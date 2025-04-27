@@ -1,9 +1,8 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../hooks/mutations/authMutations';
 import { useUserStore } from '../stores/userStore/userStore';
-import Cookies from 'js-cookie';
-import { userLoginApi } from '../api/authApi';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -12,41 +11,28 @@ const LoginForm: React.FC = () => {
 
   const {
     email,
-    password,
     setEmail,
-    setPassword,
-    setName,
-    setUserId,
-    setProfileImg,
-    setAccessToken,
+    password,
+    setPassword
   } = useUserStore();
+
+  const loginMutation = useLoginMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-  
+    setLoading(true);
+
     try {
-      const data = await userLoginApi({ email, password });  
-      const { accessToken, user } = data;
-  
-      setUserId(user.id.toString());
-      setName(user.name);
-      setEmail(user.email);
-      setProfileImg(user.profile_img !== 'null' ? user.profile_img : '');
-      setAccessToken(accessToken); 
-      Cookies.set('token', accessToken, {expires:0.1})
-  
-      console.log('Login success:', data);
+      await loginMutation.mutateAsync({ email, password });
       navigate('/');
     } catch (err) {
       setError('Invalid email or password');
-      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <Box component="form" onSubmit={handleLogin}>
       <Typography textAlign="left">
@@ -59,6 +45,7 @@ const LoginForm: React.FC = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </Typography>
+
       <Typography textAlign="left">
         <h1>Password</h1>
         <TextField
@@ -76,20 +63,10 @@ const LoginForm: React.FC = () => {
           {error}
         </Typography>
       )}
-        <Button
-        onClick={() => navigate("/password/reset")}
-        >
-         <a href="/password/reset" className="text-black normal-case hover:underline">
-         <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
-         </a>
-        </Button>
-      <Typography textAlign="left">
-        <Button onClick={() => navigate('/reset-password')}>
-          <a href="/reset-password" className="text-black-300 hover:underline">
-            Forgot your password?
-          </a>
-        </Button>
-      </Typography>
+
+      <a href="/password/reset" className="text-black normal-case hover:underline">
+        <h1 className="text-sm normal-case text-black hover:underline">Forgot your password?</h1>
+      </a>
 
       <Button
         fullWidth
@@ -97,7 +74,11 @@ const LoginForm: React.FC = () => {
         color="primary"
         type="submit"
         disabled={loading}
-        sx={{ mt: 2, bgcolor: '#fb2c36' }}
+        sx={{
+          mt: 2,
+          bgcolor: '#fb2c36',
+          borderRadius: 100,
+        }}
       >
         {loading ? 'Logging in...' : 'Login'}
       </Button>
