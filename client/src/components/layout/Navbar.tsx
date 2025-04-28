@@ -3,7 +3,6 @@ import { Avatar, Menu, MenuItem, IconButton, Button, TextField } from '@mui/mate
 import { useNavigate } from 'react-router-dom';
 import { FiChevronDown } from 'react-icons/fi';
 import { useAuthStore } from '../../stores/AuthStore';
-import Cookies from 'js-cookie';
 import LogoutForm from '../form/LogoutFom';
 
 const Navbar: React.FC = () => {

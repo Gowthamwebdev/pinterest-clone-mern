@@ -123,8 +123,27 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   profile_img: 'profile_img',
+  dob: 'dob',
   created_at: 'created_at',
   deleted_at: 'deleted_at'
+};
+
+exports.Prisma.PinScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  image_url: 'image_url',
+  tags: 'tags',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+  deleted_at: 'deleted_at',
+  user_id: 'user_id'
+};
+
+exports.Prisma.Saved_pinScalarFieldEnum = {
+  user_id: 'user_id',
+  pin_id: 'pin_id',
+  created_at: 'created_at'
 };
 
 exports.Prisma.SortOrder = {
@@ -144,7 +163,9 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
-  user: 'user'
+  user: 'user',
+  pin: 'pin',
+  saved_pin: 'saved_pin'
 };
 
 /**

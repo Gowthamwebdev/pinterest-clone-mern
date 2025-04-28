@@ -7,7 +7,7 @@ type Props = {
 const Navbar = ({ onLoginClick }: Props) => {
   return (
    
-    <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0 z-10">
+    <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0 ">
       <div className="flex items-centre bg-[#f5f5f5] px-2 py-0.5 rounded-lg mr-3">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -31,14 +31,13 @@ const Navbar = ({ onLoginClick }: Props) => {
           disableUnderline: true,
           sx: {
             fontSize: 14,
-            textAlign: "left", // Ensures text alignment
-            paddingLeft: "10px", // Adds spacing inside the input
-
+            textAlign: "left",
+            paddingLeft: "10px",
           },
         }}
         sx={{
-          width: "50%", // Sets the width for central alignment
-          maxWidth: "400px", // Optional: limit the width for responsiveness
+          width: "50%",
+          maxWidth: "400px", 
         }}
       />
       </div>
@@ -61,12 +60,8 @@ const Navbar = ({ onLoginClick }: Props) => {
             backgroundColor: '#e60023',
             '&:hover': { backgroundColor: '#ad081b' },
             boxShadow: 'none',
-            color: 'black',
-            borderRadius: '30px',
-            borderRadius:200,
-            color:'white',
-            py:1,
-            border:'none',
+              color: 'black',
+              borderRadius: '30px',
             fontWeight: 'bold',
             textTransform: 'none',
             padding: '8px 15px',
@@ -96,6 +91,6 @@ const Navbar = ({ onLoginClick }: Props) => {
       </div>
       </div>
   );
-};
+};  
 
 export default Navbar;
