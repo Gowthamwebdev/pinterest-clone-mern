@@ -59,27 +59,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 							Continue with Google
 						</button>
 
-						{/* OR Divider - Positioned between buttons */}
-						{/* {!isLogin && (
-							<div className="flex items-center my-3">
-								<div className="flex-grow border-t border-gray-300"></div>
-								<span className="mx-3 text-sm font-medium text-gray-500">
-									OR
-								</span>
-								<div className="flex-grow border-t border-gray-300"></div>
-							</div>
-						)} */}
-
-						{/* Log in to Existing Account Button (Signup Page) */}
-						{/* {!isLogin && (
-							<button
-								className="w-full py-3 px-6 border border-gray-300 rounded-full flex items-center justify-center gap-3 text-gray-700 font-semibold hover:bg-gray-100"
-								onClick={() => setIsLogin(true)}
-							>
-								Log in to existing account
-							</button>
-						)} */}
-						{/* Footer Section */}
 						<div className="text-sm mt-6 text-gray-500">
 							{isLogin ? "Don't have an account?" : "Already have an account?"}
 							<button

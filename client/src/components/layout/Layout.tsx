@@ -4,16 +4,18 @@ import Navbar from "./Navbar";
 import Notifications from "../ui/Notifications";
 import SidebarOptions from "./SidebarOptions";
 import { useUiStore } from "../../stores/UiStore";
-import { useAuthStore } from "../../stores/AuthStore";
 
-const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { notification, setting, setNotification, setSetting } = useUiStore();
-  const { isAuthenticated } = useAuthStore();
 
   return (
     <div className="flex h-screen">
       <div className="w-[5vw] bg-white border-r mt-5 border-gray-200">
-       {isAuthenticated && <Sidebar setNotification={setNotification} setSetting={setSetting} /> }
+        <Sidebar setNotification={setNotification} setSetting={setSetting} />
       </div>
       <div className="flex flex-col flex-1">
         <Navbar />

@@ -19,7 +19,7 @@ const LoginForm: React.FC = () => {
 
     try {
       await loginMutation.mutateAsync({ email, password });
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid email or password');
     } finally {
