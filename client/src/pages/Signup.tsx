@@ -1,16 +1,16 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../stores/userStore/userStore';
 import { useSignupMutation } from '../hooks/mutations/authMutations';
+import { useUserStore } from '../stores/userStore/userStore';
 
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
-  
-  const { email, password, name, setEmail, setPassword, setName } = useUserStore();
-  
+
+  const { email, password, name, dateOfBirth, setEmail, setPassword, setName, setDateOfBirth } = useUserStore();
+
   const { mutateAsync: signupMutation } = useSignupMutation();
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -19,7 +19,7 @@ const SignUpForm: React.FC = () => {
     setError('');
 
     try {
-      await signupMutation({ name, email, password, userId: '', profileImg: '' });
+      await signupMutation({ name, email, password, dateOfBirth, userId: '', profileImg: '' });
       
       setTimeout(() => {
         navigate('/login');
@@ -34,17 +34,6 @@ const SignUpForm: React.FC = () => {
 
   return (
     <Box component="form" onSubmit={handleSignup}>
-      <Typography textAlign="left">
-        <h1>Name</h1>
-        <TextField
-          fullWidth
-          margin="normal"
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </Typography>
-
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
@@ -68,6 +57,20 @@ const SignUpForm: React.FC = () => {
         />
       </Typography>
 
+      <Typography textAlign="left">
+        <h1>Birthdate</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          type="date"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
+      </Typography>
+
       {error && (
         <Typography color="error" textAlign="left">
           {error}
@@ -83,7 +86,7 @@ const SignUpForm: React.FC = () => {
         sx={{
           mt: 2,
           bgcolor: '#fb2c36',
-          borderRadius: 100,
+          borderRadius: 300,
         }}
       >
         {loading ? 'Signing up...' : 'SignUp'}

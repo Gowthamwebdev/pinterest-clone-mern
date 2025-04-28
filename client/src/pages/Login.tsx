@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
       )}
 
       <a href="/password/reset" className="text-black normal-case hover:underline">
-        <h1 className="text-sm normal-case text-black hover:underline">Forgot your password?</h1>
+        <h1 className=" flex-left text-sm normal-case text-black hover:underlinet">Forgot your password?</h1>
       </a>
 
       <Button

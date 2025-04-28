@@ -35,6 +35,9 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.9.0
+      cookie:
+        specifier: ^1.0.2
+        version: 1.0.2
       form:
         specifier: ^0.2.5
         version: 0.2.5

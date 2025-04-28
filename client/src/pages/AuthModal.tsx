@@ -1,6 +1,8 @@
 import { Google } from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
+import pinterestSvg from "../../public/pinterest.svg";
 import LoginForm from "./Login";
 import SignupForm from "./Signup";
 
@@ -25,27 +27,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 						exit={{ scale: 0.9 }}
 						className="bg-white p-8 w-[360px] rounded-2xl shadow-lg text-center relative"
 					>
-						{/* Close Button */}
 						<button
 							onClick={onClose}
 							className="absolute top-3 right-4 text-gray-600 text-xl focus:outline-none hover:text-gray-800"
 						>
-							×
+						<CloseIcon/>
 						</button>
-
-						{/* Pinterest Logo */}
 						<img
-							src="https://cdn-icons-png.flaticon.com/512/174/174863.png"
+							src={pinterestSvg}
 							alt="Pinterest Logo"
 							className="w-12 mx-auto mb-5"
 						/>
 
-						{/* Heading */}
-						<h4 className="text-xl font-bold mb-6 text-gray-800">
-							Login in to see more
-						</h4>
+						
+                        <h4
+                        className="text-xl font-bold mb-2 text-gray-800"
+                        style={{ fontFamily: "sans-serif" }}
+                        >
+                        Welcome to Pinterest
+                        </h4>
 
-						{/* Form Section */}
+
+						
 						{isLogin ? <LoginForm /> : <SignupForm />}
 
 						<div className="flex items-center my-3">
@@ -59,7 +62,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
 							Continue with Google
 						</button>
 
-						<div className="text-sm mt-6 text-gray-500">
+						<div className="text-sm mt-1 text-gray-500">
 							{isLogin ? "Don't have an account?" : "Already have an account?"}
 							<button
 								onClick={() => setIsLogin(!isLogin)}
