@@ -1,47 +1,112 @@
-import { Typography } from '@mui/material'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Box, Button, TextField, Typography } from '@mui/material';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '../stores/userStore/userStore';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
-type SignupFormInputs = {
-  username: string
-  password: string
-  email: string
-}
+const SignUpForm: React.FC = () => {
+const navigate = useNavigate();
+const [loading, setLoading] = React.useState(false);
+const [error, setError] = React.useState('');
+const [dob,setDob]=React.useState('');
 
-const Signup: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupFormInputs>()
-  const navigate = useNavigate()
+const { name, email, password, setEmail, setPassword, setName } = useUserStore();
 
-  const onSubmit = (data: SignupFormInputs) => {
-    console.log("User registered:", data)
-    navigate('/')
-  }
+const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
-      <Typography textAlign="left">
-      <h1 className="text-xs font-normal">Username</h1>
-      <input placeholder="Username" {...register("username", { required: true })} />
-      {errors.username && <span style={styles.error}>Username is required</span>}
-      </Typography>
-      <Typography textAlign="left">
-        <h1 className="text-xs font-normal ">Email Address</h1>
-      <input type="email" placeholder="Email" {...register("email", { required: true })} />
-      {errors.email && <span style={styles.error}>Email is required</span>}
-      </Typography>
-      <Typography textAlign="left">
-      <h1 className="text-xs font-normal ">password</h1>
-      <input type="password" placeholder="Password" {...register("password", { required: true })} />
-      {errors.password && <span style={styles.error}>Password is required</span>}
-      </Typography>
-    </form>
-  )
-}
+    try {
+    const data = await userSignupApi({ name, email, password });
 
-const styles = {
-  form: { display: 'flex', flexDirection: 'column' as const, gap: '10px', maxWidth: '300px', mb: '2' },
-  error: { color: 'red', fontSize: '12px' }
-}
+    console.log('Signup success:', data);
+      navigate('/login'); // Redirect to login page after successful signup
+    } catch (err) {
+    setError('Signup failed. Please try again.');
+    console.error('Signup error:', err);
+    } finally {
+    setLoading(false);
+    }
+};
 
-export default Signup
+return (
+    <Box component="form" onSubmit={handleSignup}>
+        <Typography textAlign="left">
+        <h1>Email</h1>
+        <TextField
+        fullWidth
+        margin="normal"
+        label="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        sx={{ mt: 2 }}
+        InputProps={{
+          style: {
+            height: '40px',
+          },
+        }}
+        />
+    </Typography>
+    <Typography textAlign="left">
+        <h1>Password</h1>
+        <TextField
+        fullWidth
+        margin="normal"
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        sx={{ mt: 2 }}
+        InputProps={{
+          style: {
+            height: '40px',
+          },
+        }}
+        />
+        <Typography sx={{ textAlign: 'left', mb: 2 }}>
+  <h1 className="text-gray-800">Birthdate</h1>
+  <TextField
+    fullWidth
+    margin="dense"
+    type="date"
+    value={dob}
+    onChange={(e) => setDob(e.target.value)}
+    InputLabelProps={{
+      shrink: true,
+    }}
+    InputProps={{
+      style: {
+        height: '40px',
+      },
+      endAdornment: (
+        <CalendarTodayIcon
+          sx={{ color: 'gray', marginLeft: '8px' }}
+        />
+      ),
+    }}
+  />
+</Typography>
+    </Typography>
+
+    {error && (
+        <Typography color="error" textAlign="left">
+        {error}
+        </Typography>
+    )}
+
+    <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        type="submit"
+        disabled={loading}
+        sx={{ mt: 2, bgcolor: '#fb2c36' }}
+        >
+        {loading ? 'Signing up...' : 'Sign Up'}
+    </Button>
+    </Box>
+);
+};
+
+export default SignUpForm;

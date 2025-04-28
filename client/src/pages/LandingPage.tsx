@@ -14,7 +14,7 @@ const LandingPage = () => {
         Welcome to Our Pinterest ✨
       </div>
 
-      {openModal && <AuthModal onClose={() => setOpenModal(false)} />}
+      {openModal && <AuthModal onClose={() => setOpenModal(false)} children={true} />}
     </div>
   );
 };

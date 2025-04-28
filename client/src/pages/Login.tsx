@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
       setName(user.name);
       setEmail(user.email);
       setProfileImg(user.profile_img !== 'null' ? user.profile_img : '');
-      setAccessToken(accessToken); 
+      setAccessToken(accessToken);
       Cookies.set('token', accessToken, {expires:0.1})
   
       console.log('Login success:', data);
@@ -76,22 +76,15 @@ const LoginForm: React.FC = () => {
           {error}
         </Typography>
       )}
-        <Button
-        onClick={() => navigate("/password/reset")}
-        >
-         <a href="/password/reset" className="text-black normal-case hover:underline">
-         <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
-         </a>
-        </Button>
-      <Typography textAlign="left">
+        
+        <Typography textAlign="left">
         <Button onClick={() => navigate('/reset-password')}>
-          <a href="/reset-password" className="text-black-300 hover:underline">
-            Forgot your password?
-          </a>
+        <a href="/password/reset" className="text-black normal-case hover:underline">
+        <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
+        </a>
         </Button>
-      </Typography>
-
-      <Button
+        </Typography>
+        <Button
         fullWidth
         variant="contained"
         color="primary"
