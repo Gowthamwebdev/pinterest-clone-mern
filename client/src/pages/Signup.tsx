@@ -1,47 +1,95 @@
-import { Typography } from '@mui/material'
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { Box, Button, TextField, Typography } from '@mui/material';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '../stores/userStore/userStore';
+import { useSignupMutation } from '../hooks/mutations/authMutations';
 
-type SignupFormInputs = {
-  username: string
-  password: string
-  email: string
-}
+const SignUpForm: React.FC = () => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
+  
+  const { email, password, name, setEmail, setPassword, setName } = useUserStore();
+  
+  const { mutateAsync: signupMutation } = useSignupMutation();
 
-const Signup: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupFormInputs>()
-  const navigate = useNavigate()
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
-  const onSubmit = (data: SignupFormInputs) => {
-    console.log("User registered:", data)
-    navigate('/')
-  }
+    try {
+      await signupMutation({ name, email, password, userId: '', profileImg: '' });
+      
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err: any) {
+      setError(err.message || 'Signup failed');
+      console.error('Signup error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
+    <Box component="form" onSubmit={handleSignup}>
       <Typography textAlign="left">
-      <h1 className="text-xs font-normal">Username</h1>
-      <input placeholder="Username" {...register("username", { required: true })} />
-      {errors.username && <span style={styles.error}>Username is required</span>}
+        <h1>Name</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </Typography>
-      <Typography textAlign="left">
-        <h1 className="text-xs font-normal ">Email Address</h1>
-      <input type="email" placeholder="Email" {...register("email", { required: true })} />
-      {errors.email && <span style={styles.error}>Email is required</span>}
-      </Typography>
-      <Typography textAlign="left">
-      <h1 className="text-xs font-normal ">password</h1>
-      <input type="password" placeholder="Password" {...register("password", { required: true })} />
-      {errors.password && <span style={styles.error}>Password is required</span>}
-      </Typography>
-    </form>
-  )
-}
 
-const styles = {
-  form: { display: 'flex', flexDirection: 'column' as const, gap: '10px', maxWidth: '300px', mb: '2' },
-  error: { color: 'red', fontSize: '12px' }
-}
+      <Typography textAlign="left">
+        <h1>Email</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </Typography>
 
-export default Signup
+      <Typography textAlign="left">
+        <h1>Password</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </Typography>
+
+      {error && (
+        <Typography color="error" textAlign="left">
+          {error}
+        </Typography>
+      )}
+
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        type="submit"
+        disabled={loading}
+        sx={{
+          mt: 2,
+          bgcolor: '#fb2c36',
+          borderRadius: 100,
+        }}
+      >
+        {loading ? 'Signing up...' : 'SignUp'}
+      </Button>
+    </Box>
+  );
+};
+
+export default SignUpForm;
