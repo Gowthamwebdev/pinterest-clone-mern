@@ -38,7 +38,7 @@ const SignUpForm: React.FC = () => {
       };
       
       await signupMutation(userData);
-      useUserStore.setState({userId:userData});
+      useUserStore.setState({user:userData});
       console.log("Stored user Data in authStore");
       return true;
     

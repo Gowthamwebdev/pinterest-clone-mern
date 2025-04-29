@@ -4,9 +4,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../hooks/mutations/authMutations";
-import { useUserStore } from "../stores/userStore/userStore";
 import { loginSchema } from "./Validations/loginSchema";
-import { any } from "zod";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -24,8 +22,10 @@ const LoginForm: React.FC = () => {
     defaultValues: { email, password },
   });
 
-  const handleLogin = async (email: any,password: any) => {
+  const handleLogin = async (e:any) => {
     setLoading(true);
+    console.log("head");
+    
 
   try {
     await loginMutation.mutateAsync({
@@ -40,10 +40,10 @@ const LoginForm: React.FC = () => {
     setError(err instanceof Error ? err.message : 'Invalid email or password');
   } finally {
     setLoading(false);
-    }
+   }
   };
   return (
-    <Box component="form" onSubmit={handleSubmit(handleLogin)}>
+    <Box>
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
@@ -82,19 +82,23 @@ const LoginForm: React.FC = () => {
   fullWidth
   variant="contained"
   color="primary"
-  type="submit"
+  
   disabled={loading}
   sx={{
     mt: 2,
     bgcolor: "#fb2c36",
     borderRadius: 100,
   }}
-  onClick={handleSubmit(async (data) => {
-    const isLoggedIn = await handleLogin(data);
-    if (isLoggedIn) {
-      navigate("/home");
-    }
-  })}
+  onClick={() => {
+    // const isLoggedIn = await handleLogin(data);
+console.log('in button');
+
+console.log('email',email);
+console.log('pass',password);
+if(isLoggedIn){
+  navigate('/home');
+}
+  }}
 >
   {loading ? "Logging in..." : "Login"}
 </Button>
