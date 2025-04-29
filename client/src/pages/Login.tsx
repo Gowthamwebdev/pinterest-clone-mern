@@ -13,7 +13,6 @@ const LoginForm: React.FC = () => {
   const[email,setEmail]= useState("");
   const[password, setPassword]=useState("");
 
-
   const {
     register,
     handleSubmit,
@@ -26,8 +25,7 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     console.log("head");
     
-
-  try {
+    try {
     await loginMutation.mutateAsync({
       email,
       password,
@@ -55,6 +53,7 @@ const LoginForm: React.FC = () => {
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </Typography>
 
@@ -79,31 +78,27 @@ const LoginForm: React.FC = () => {
         </h1>
       </Link>
       <Button
-  fullWidth
-  variant="contained"
-  color="primary"
-  
-  disabled={loading}
-  sx={{
-    mt: 2,
-    bgcolor: "#fb2c36",
-    borderRadius: 100,
-  }}
-  onClick={() => {
-    // const isLoggedIn = await handleLogin(data);
-console.log('in button');
-
-console.log('email',email);
-console.log('pass',password);
-if(isLoggedIn){
-  navigate('/home');
-}
-  }}
->
-  {loading ? "Logging in..." : "Login"}
-</Button>
-
-    </Box>
+        fullWidth
+        variant="contained"
+        color="primary"
+        disabled={loading}
+        sx={{
+          mt: 2,
+            bgcolor: "#fb2c36",
+            borderRadius: 100,
+        }}
+            onClick={() => {
+            console.log('in button');
+            console.log('email',email); 
+            console.log('pass',password);
+            if(isLoggedIn){
+                 navigate('/home');
+            }
+        }}
+        >
+        {loading ? "Logging in..." : "Login"}
+        </Button>
+      </Box>
   );
 };
 

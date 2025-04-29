@@ -10,6 +10,7 @@ import { signupSchema } from "./Validations/signupSchema";
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+
   const { email, setEmail, password, setPassword, name, setName, dateOfBirth, setDateOfBirth } = useUserStore();
   const signupMutation = useSignupMutation();
   const [showPassword, setShowPassword] = useState(false);
@@ -45,13 +46,14 @@ const SignUpForm: React.FC = () => {
     } catch (err: any) {
       console.error("Signup error:", err.message || "Signup failed");
       return false;
-    
+   
     } finally {
       setLoading(false);
     }
   };
 
   return (
+
     <Box component="form" onSubmit={handleSubmit(handleSignup)} sx={{ maxWidth: "400px", margin: "0 auto" }}>
       <Typography textAlign="left" sx={{ mb: 1, fontSize: "14px" }}>
         Email

@@ -3,9 +3,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
 import { PrismaService } from '../prisma/prisma.service';
+import { JwtStrategy } from 'src/shared/strategies/jwt.strategy';
+import { LocalStrategy } from 'src/shared/strategies/local.strategy';
+
 
 @Module({
   imports: [

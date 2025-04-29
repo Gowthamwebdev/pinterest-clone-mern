@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import LandingPage from "../pages/LandingPage";
 import Login from "../pages/Login";
 import Settings from "../pages/Settings";
+
 import SignUpForm from "../pages/Signup";
 import { useAuthStore } from "../stores/authStore";
 
@@ -32,10 +33,12 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<PublicRoute />}>
+
         <Route path="/" element={<LandingPage />} />
         <Route path="password/-reset" element={<ResetPasswordForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUpForm />} />
+
       </Route>
 
       <Route element={<ProtectedRoute />}>

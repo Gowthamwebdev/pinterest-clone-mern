@@ -14,6 +14,7 @@ const Navbar = ({ onLoginClick }: Props) => {
   };
 
   return (
+
     <div
       className={`w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0  ${
         isLoginActive ? "opacity-50 pointer-events-none" : ""
@@ -64,7 +65,6 @@ const Navbar = ({ onLoginClick }: Props) => {
           />
         </div>
       </div>
-
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
           onClick={onLoginClick}
@@ -106,4 +106,4 @@ const Navbar = ({ onLoginClick }: Props) => {
   };
   
   export default Navbar;
-  
+

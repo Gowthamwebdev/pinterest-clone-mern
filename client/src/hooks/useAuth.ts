@@ -1,6 +1,7 @@
-import Cookies from "js-cookie";
+
 import { useEffect } from "react";
-import { useAuthStore } from "../stores/authStore";
+import Cookies from "js-cookie";
+import { useAuthStore } from "../stores/AuthStore";
 
 export const useAuth = () => {
   const { setAccessToken, setIsAuthenticated } = useAuthStore();

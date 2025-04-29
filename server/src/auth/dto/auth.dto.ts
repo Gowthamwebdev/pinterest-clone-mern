@@ -15,6 +15,10 @@ export class SignupDto {
 }
 
 export class LoginDto {
+
+
+  id: number;
+  
   @IsEmail()
   email: string;
 

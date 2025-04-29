@@ -1,4 +1,3 @@
-// LandingPage.tsx
 import { useState } from "react";
 import AuthModal from "./AuthModal";
 import Navbar from "../components/layout/LandingNav";

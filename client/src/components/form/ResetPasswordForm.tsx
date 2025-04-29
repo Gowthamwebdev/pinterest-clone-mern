@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ResetPassword: React.FC = () => {
+  const ResetPassword: React.FC = () => {
   const [email, setEmail] = useState("");
-  const [resetMode, setResetMode] = useState(false); // Track whether reset form is displayed
+  const [resetMode, setResetMode] = useState(false); 
   const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 pt-20">
-      {/* Search Section */}
       <div className="text-center">
         <h1
           className="text-2xl font-bold text-gray-900 mt-2"
@@ -56,13 +55,12 @@ const ResetPassword: React.FC = () => {
                 : "hover:bg-red-700"
             }`}
             disabled={!email.includes("@")}
-            onClick={() => setResetMode(true)} // Toggle reset mode
+            onClick={() => setResetMode(true)} 
           >
             Search
           </button>
         </div>
       </div>
-
       {resetMode && (
         <div className="flex flex-col items-center mt-10 w-full max-w-md">
           <h1
@@ -102,5 +100,4 @@ const ResetPassword: React.FC = () => {
     </div>
   );
 };
-
 export default ResetPassword;

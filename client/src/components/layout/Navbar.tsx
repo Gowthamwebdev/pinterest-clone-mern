@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
           stroke="currentColor"
           style={{ width: 20, height: 20, color: "#757575" }}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-1.85z" />
+         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-1.85z" />
         </svg>
         <TextField
           placeholder="Search"
@@ -76,7 +76,9 @@ const Navbar: React.FC = () => {
         ) : (
           <>
             <Button
+
             onClick={() => openModal("Signup")}
+
               variant="text"
               sx={{
                 color: "black",

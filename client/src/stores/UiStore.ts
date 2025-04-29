@@ -1,6 +1,5 @@
 import { create } from 'zustand';
-
-interface AppState {
+interface appState {
   notification: boolean;
   setting: boolean;
 
@@ -8,7 +7,7 @@ interface AppState {
   setSetting: (setting: boolean) => void;
 }
 
-export const useUiStore = create<AppState>((set) => ({
+export const useUiStore = create<appState>((set) => ({
   notification: false,
   setting: false,
 

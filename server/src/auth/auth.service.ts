@@ -1,5 +1,4 @@
-// src/auth/auth.service.ts
-import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
@@ -13,44 +12,61 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, pass: string): Promise<any> {
-    const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) throw new NotFoundException('User not found');
-
-    const isValid = await bcrypt.compare(pass, user.password);
-    if (!isValid) throw new UnauthorizedException('Invalid password');
-
-    return user;
+    try{
+      const user = await this.prisma.user.findUnique({ where: { email } });
+      if (!user) throw new NotFoundException('User not found');
+  
+      const isValid = await bcrypt.compare(pass, user.password);
+      if (!isValid) throw new UnauthorizedException('Invalid password');
+  
+      return user;
+    }
+    catch(error){
+      throw new NotFoundException('Unexpected error occured: ', error.message);
+    }
   }
 
-  async login(userData: LoginDto) {
-    const user = await this.validateUser(userData.email, userData.password);
-    const payload = { userId: user.id };
-    
-    return {
-      token: this.jwtService.sign(payload),
-    };
+  login(user: LoginDto) {
+    try{
+      const payload = { 
+        sub: user.id,  
+        userId: user.id 
+      };    
+      return {
+        token: this.jwtService.sign(payload),
+      };
+    }
+    catch(error){
+      throw new NotFoundException('Unexpected error occured: ', error.message);
+    }
   }
 
   async getUserProfile(userId: number) {
-    console.log('Fetching profile for user ID:', userId);
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        profile_img: true,
+    try{
+      console.log('Fetching profile for user ID:', userId);
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          profile_img: true,
+        }
+      });
+      
+      if (!user) {
+        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
       }
-    });
-    
-    if (!user) {
-      throw new NotFoundException('User not found');
+      
+      return user;
     }
-    
-    return user;
+    catch(error){
+        throw new NotFoundException('Unexpected error occured: ', error.message);
+    }
   }
 
   async signUp(userData: SignupDto) {
+   try{
     const existingUser = await this.prisma.user.findUnique({
       where: { email: userData.email },
     });
@@ -60,7 +76,7 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const user = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         name: userData.name,
         email: userData.email,
@@ -68,11 +84,12 @@ export class AuthService {
         profile_img: userData.profile_img || '',
       },
     });
-
-    const { password, ...result } = user;
     return {
-      message: 'User created successfully',
-      user: result
+      message: 'User created successfully'
     };
+   }
+   catch(error){
+    throw new NotFoundException('Unexpected error occured: ', error.message);
+   }
   }
 }
