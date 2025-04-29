@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { userLoginApi, userSignupApi, fetchUserProfileApi } from '../../api/authApi';
-import { useUserStore } from '../../stores/userStore/userStore';
-import { useAuthStore } from '../../stores/AuthStore';
 import Cookies from 'js-cookie';
+import { fetchUserProfileApi, userLoginApi, userSignupApi } from '../../api/authApi';
+import { useAuthStore } from '../../stores/authStore';
+import { useUserStore } from '../../stores/userStore/userStore';
 
 export const useLoginMutation = () => {
   const { setAccessToken, setIsAuthenticated } = useAuthStore();

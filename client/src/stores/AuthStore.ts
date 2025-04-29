@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { AuthState } from '../types/AuthTypes';
+import { AuthState } from '../types/authTypes';
 import Cookies from 'js-cookie';
 
 export const useAuthStore = create<AuthState>((set) => ({

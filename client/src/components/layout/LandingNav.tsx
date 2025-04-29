@@ -2,6 +2,7 @@ import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import pinterestSvg from "../../../public/pinterest.svg";
 
+
 type Props = {
   onLoginClick: () => void;
 };
@@ -83,7 +84,7 @@ const Navbar = ({ onLoginClick }: Props) => {
             Login
           </Button>
           <Button
-            onClick={(!isLoginActive)}
+            onClick={(!onLoginClick)}
             sx={{
               backgroundColor: "#e6e6e6",
               "&:hover": { backgroundColor: "#d9d9d9" },

@@ -2,7 +2,7 @@ import { Avatar, Button, IconButton, Menu, MenuItem, TextField } from '@mui/mate
 import React from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../stores/AuthStore';
+import { useAuthStore } from '../../stores/authStore';
 import LogoutForm from '../form/LogoutFom';
 
 const Navbar: React.FC = () => {

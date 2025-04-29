@@ -63,7 +63,6 @@ const ResetPassword: React.FC = () => {
         </div>
       </div>
 
-      {/* Reset Password Section */}
       {resetMode && (
         <div className="flex flex-col items-center mt-10 w-full max-w-md">
           <h1
