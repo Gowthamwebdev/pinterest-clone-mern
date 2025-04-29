@@ -27,12 +27,8 @@ export class AuthService {
     }
   }
 
-  async login(userData: LoginDto) {
+  login(user: LoginDto) {
     try{
-      const user = await this.validateUser(userData.email, userData.password);
-      if(!user){
-        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-      }
       const payload = { 
         sub: user.id,  
         userId: user.id 

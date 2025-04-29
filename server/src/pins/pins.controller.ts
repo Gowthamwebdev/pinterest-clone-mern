@@ -1,7 +1,8 @@
-import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { CreatePinDto } from './dto/create-pin.dto';
 import { PinService } from './pins.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('pins')
 export class PinController {
@@ -9,7 +10,13 @@ export class PinController {
 
   @Post('create')
   @UseGuards(JwtAuthGuard)
-  async createPin(@Request() req, @Body() createPinDto: CreatePinDto) {
-    return await this.pinService.createPin(req.user.userId, createPinDto);
+  @UseInterceptors(FileInterceptor('image'))
+  async createPin(
+    @Request() req,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() createPinDto: CreatePinDto,
+  ){
+    console.log('user Id', req.user.userId, 'data', createPinDto);
+    return await this.pinService.createPin(req.user.userId, createPinDto, image);
   }
 }

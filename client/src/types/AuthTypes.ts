@@ -1,9 +1,9 @@
-export type AuthType = {
+export type authType = {
     isAuthenticated: boolean,
     accessToken: string,
 }
 
-export type AuthState = {
+export type authState = {
   isAuthenticated: boolean,
   accessToken: string,
 
