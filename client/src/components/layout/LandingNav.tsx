@@ -90,6 +90,6 @@ const Navbar = ({ onLoginClick }: Props) => {
       </div>
     </div>
   );
-};
+};  
 
 export default Navbar;

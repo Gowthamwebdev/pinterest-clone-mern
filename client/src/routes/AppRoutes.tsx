@@ -17,7 +17,7 @@ const AppRoutes = () => {
 
   const ProtectedRoute = () => {
     if (!isAuthenticated || !token) {
-      return <Navigate to="/" replace state={{ from: location }} />;
+      return <Navigate to="/" replace state={{ from: window.location.pathname }} />;
     }
     return <Layout><Outlet /></Layout>;
   };

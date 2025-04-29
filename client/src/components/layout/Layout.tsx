@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Notifications from "../ui/Notifications";
 import SidebarOptions from "./SidebarOptions";
-import { useUiStore } from "../../stores/UiStore";
+import { useUiStore } from "../../stores/uiStore";
 
 interface LayoutProps {
   children: ReactNode;
