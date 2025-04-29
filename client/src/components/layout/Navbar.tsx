@@ -1,10 +1,13 @@
+import { Avatar, Button, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 import React from 'react';
-import { Avatar, Menu, MenuItem, IconButton } from '@mui/material';
+import { FiChevronDown } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { FiChevronDown } from "react-icons/fi";
+import { useAuthStore } from '../../stores/AuthStore';
+import LogoutForm from '../form/LogoutFom';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, resetAuth } = useAuthStore();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -22,45 +25,89 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full top-0 flex justify-between items-center px-4 py-2 bg-white">
-      <div className="flex items-center bg-gray-100 px-4 rounded-lg w-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-5 h-5 text-gray-500"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-1.85z" />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search"
-            className="ml-2 w-full py-4 bg-transparent rounded-sm outline-none text-gray-900 text-sm "
-          />
-        </div>
+    <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0 z-10">
+      
+      <div className="flex items-center bg-[#f5f5f5] px-2 py-0.5 rounded-lg flex-grow mr-3">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          style={{ width: 20, height: 20, color: "#757575" }}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-1.85z" />
+        </svg>
+        <TextField
+          placeholder="Search"
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            sx: { ml: 1, fontSize: 14 },
+          }}
+          sx={{ flex: 1 }}
+        />
+      </div>
 
-      <IconButton onClick={handleAvatarClick} size="small" sx={{ ml: 2 }}>
-        <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
-        <div className='ml-2 text-gray-700 font-semibold'>
-          <FiChevronDown size={20} />
-        </div>
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleMenuClose}
-        PaperProps={{
-          style: {
-            boxShadow: '0 4px 4px rgba(0, 0, 0, 0.1)',
-          },
-        }}
-      >
-        <MenuItem onClick={() => handleNavigation('profile')}>Profile</MenuItem>
-        <MenuItem onClick={() => handleNavigation('account')}>My account</MenuItem>
-        <MenuItem onClick={() => handleNavigation('logout')}>Sign out</MenuItem>
-      </Menu>
+      <div className="flex items-center gap-4">
+        {isAuthenticated ? (
+          <>
+            <IconButton onClick={handleAvatarClick} size="small" sx={{ ml: 2 }}>
+              <Avatar alt="User Avatar" src="/path-to-avatar.jpg" />
+              <div className="ml-2 text-gray-700 font-semibold">
+                <FiChevronDown size={20} />
+              </div>
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              PaperProps={{
+                style: {
+                  boxShadow: '0 4px 4px rgba(0, 0, 0, 0.1)',
+                },
+              }}
+            >
+              <MenuItem onClick={() => handleNavigation('profile')}>Profile</MenuItem>
+              <MenuItem onClick={() => handleNavigation('account')}>My Account</MenuItem>
+              <MenuItem onClick={handleMenuClose}><LogoutForm/></MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <>
+            <Button
+            onClick={() => openModal("Signup")}
+              variant="text"
+              sx={{
+                color: "black",
+                fontWeight: "bold",
+                textTransform: 'none',
+              }}
+              onClick={() => handleNavigation('/signup')}
+            >
+              Signup
+            </Button>
+            <Button
+            onClick={() => openModal("login")}
+              variant="outlined"
+              onClick={() => handleNavigation('/login')}
+              sx={{
+                backgroundColor: '#e60023',
+                '&:hover': { backgroundColor: '#ad081b' },
+                boxShadow: 'none',
+                borderRadius: 200,
+                color: 'white',
+                py: 1,
+                border: 'none',
+                fontWeight: 'bold',
+                textTransform: 'none',
+              }}
+            >
+              Login
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

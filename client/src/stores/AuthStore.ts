@@ -1,0 +1,34 @@
+import { create } from 'zustand';
+import { AuthState } from '../types/AuthTypes';
+import Cookies from 'js-cookie';
+
+export const useAuthStore = create<AuthState>((set) => ({
+  isAuthenticated: false,
+  accessToken: '',
+
+  isModalOpen: false,
+  modalType: null,
+
+
+  setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
+  setAccessToken: (accessToken: string) => set({ accessToken }),
+
+ 
+  openModal: (type: 'login' | 'signup') => set({ isModalOpen: true, modalType: type }),
+  closeModal: () => set({ isModalOpen: false, modalType: null }),
+
+ 
+  logout: () => {
+    Cookies.remove('token');
+    set({
+      isAuthenticated: false,
+      accessToken: '',
+    });
+  },
+
+  resetAuth: () =>
+    set({
+      isAuthenticated: false,
+      accessToken: '',
+    }),
+}));

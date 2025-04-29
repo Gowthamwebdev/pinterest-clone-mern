@@ -1,52 +1,32 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../hooks/mutations/authMutations';
 import { useUserStore } from '../stores/userStore/userStore';
-import Cookies from 'js-cookie';
-import { userLoginApi } from '../api/authApi';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
-  const {
-    email,
-    password,
-    setEmail,
-    setPassword,
-    setName,
-    setUserId,
-    setProfileImg,
-    setAccessToken,
-  } = useUserStore();
+  const { email, setEmail, password, setPassword } = useUserStore();
+  const loginMutation = useLoginMutation();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
-  
+    setLoading(true);
+
     try {
-      const data = await userLoginApi({ email, password });  
-      const { accessToken, user } = data;
-  
-      setUserId(user.id.toString());
-      setName(user.name);
-      setEmail(user.email);
-      setProfileImg(user.profile_img !== 'null' ? user.profile_img : '');
-      setAccessToken(accessToken);
-      Cookies.set('token', accessToken, {expires:0.1})
-  
-      console.log('Login success:', data);
-      navigate('/');
+      await loginMutation.mutateAsync({ email, password });
+      navigate('/home');
     } catch (err) {
-      setError('Invalid email or password');
-      console.error('Login error:', err);
+      setError(err instanceof Error ? err.message : 'Invalid email or password');
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <Box component="form" onSubmit={handleLogin}>
       <Typography textAlign="left">
@@ -57,8 +37,10 @@ const LoginForm: React.FC = () => {
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </Typography>
+
       <Typography textAlign="left">
         <h1>Password</h1>
         <TextField
@@ -68,6 +50,7 @@ const LoginForm: React.FC = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </Typography>
 
@@ -76,21 +59,22 @@ const LoginForm: React.FC = () => {
           {error}
         </Typography>
       )}
-        
-        <Typography textAlign="left">
-        <Button onClick={() => navigate('/reset-password')}>
-        <a href="/password/reset" className="text-black normal-case hover:underline">
-        <h1 className='text-sm normal-case text-black hover:underline '>Forgot your password?</h1>
-        </a>
-        </Button>
-        </Typography>
-        <Button
+
+      <a href="/password/reset" className="text-black normal-case hover:underline">
+        <h1 className=" flex-left text-sm normal-case text-black hover:underlinet">Forgot your password?</h1>
+      </a>
+
+      <Button
         fullWidth
         variant="contained"
         color="primary"
         type="submit"
         disabled={loading}
-        sx={{ mt: 2, bgcolor: '#fb2c36' }}
+        sx={{
+          mt: 2,
+          bgcolor: '#fb2c36',
+          borderRadius: 100,
+        }}
       >
         {loading ? 'Logging in...' : 'Login'}
       </Button>
