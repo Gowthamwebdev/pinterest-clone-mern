@@ -58,7 +58,6 @@ const LoginForm: React.FC = () => {
           {...register("password")}
           error={!!errors.password}
           helperText={errors.password?.message}
-          label="Password"
           type="password"
           value={password}
           onChange={(e)=>setPassword(e.target.value)}
@@ -70,7 +69,6 @@ const LoginForm: React.FC = () => {
       Forgot your password?
       </h1>
       </Link>
-
       <Button
         fullWidth
         variant="contained"
@@ -85,7 +83,6 @@ const LoginForm: React.FC = () => {
 >
 {loading ? "Logging in..." : "Login"}
 </Button>
-
     </Box>
   );
 };

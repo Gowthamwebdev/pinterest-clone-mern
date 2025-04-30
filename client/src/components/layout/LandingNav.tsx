@@ -9,7 +9,6 @@ type Props = {
 const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
   return (
     <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0">
-      {/* Left */}
       <div className="flex items-center">
         <img
           src={pinterestSvg}
@@ -46,8 +45,6 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
           />
         </div>
       </div>
-
-      {/* Right */}
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
           onClick={onLoginClick}
@@ -87,6 +84,6 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
       </div>
     </div>
   );
-};
+};  
 
 export default Navbar;

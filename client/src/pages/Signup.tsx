@@ -87,7 +87,7 @@ const SignUpForm: React.FC = () => {
 
         }}
         onClick={()=>handleSignup()}
-      >
+
         {loading ? 'Signing up...' : 'SignUp'}
       </Button>
     </Box>
