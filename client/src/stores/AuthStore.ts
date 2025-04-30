@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
-import { authState } from '../types/AuthTypes';
+import { authState } from '../types/authTypes';
 
 export const useAuthStore = create<authState>((set) => ({
   isAuthenticated: false,

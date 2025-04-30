@@ -1,8 +1,10 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../hooks/mutations/authMutations';
 import { useUserStore } from '../stores/userStore/userStore';
+import { userLoginApi } from '../api/authApi';
+import Cookies from 'js-cookie'
+import { useAuthStore } from '../stores/authStore';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ const LoginForm: React.FC = () => {
   const [error, setError] = React.useState('');
 
   const { email, setEmail, password, setPassword } = useUserStore();
-  const loginMutation = useLoginMutation();
+  const { setAccessToken, setIsAuthenticated } = useAuthStore();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +20,11 @@ const LoginForm: React.FC = () => {
     setLoading(true);
 
     try {
-      await loginMutation.mutateAsync({ email, password });
+      const data = await userLoginApi({ email, password });
+        console.log(data.token)
+        setAccessToken(data.token);
+        setIsAuthenticated(true);
+        Cookies.set('token', data.token, { expires: 1 });
       navigate('/home');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid email or password');

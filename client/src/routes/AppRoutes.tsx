@@ -1,14 +1,14 @@
 import { Route, Routes, Navigate, Outlet } from "react-router-dom";
-import { useAuthStore } from "../stores/AuthStore";
 import CreatePost from "../pages/CreatePost";
 import Explore from "../pages/Explore";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
+// import Login from "../pages/Login";
 import Settings from "../pages/Settings";
 import ResetPasswordForm from "../components/form/ResetPasswordForm";
 import LandingPage from "../pages/LandingPage";
 import Layout from "../components/layout/Layout";
 import { useAuth } from "../hooks/useAuth";
+import { useAuthStore } from "../stores/AuthStore";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuthStore();
@@ -19,19 +19,21 @@ const AppRoutes = () => {
       return <Navigate to="/" replace state={{ from: window.location.pathname }} />;
     }
     return <Layout><Outlet /></Layout>;
+    // return <Outlet/>
   };
 
   const PublicRoute = () => {
     if (isAuthenticated && token) {
       return <Navigate to="/home" replace />;
     }
-    return <Layout><Outlet /></Layout>;
+    // return <Layout><Outlet /></Layout>;
+    return <Outlet/>
   };
 
   return (
     <Routes>
       <Route element={<PublicRoute />}>
-        <Route path="/login" element={<Login />} />
+        {/* <Route path="/login" element={<Login />} /> */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
       </Route>
