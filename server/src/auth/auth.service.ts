@@ -1,4 +1,3 @@
-// src/auth/auth.service.ts
 import { Injectable, UnauthorizedException, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -11,7 +10,6 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService
   ) {}
-
   async validateUser(email: string, pass: string): Promise<any> {
     try{
       const user = await this.prisma.user.findUnique({ where: { email } });
@@ -72,6 +70,7 @@ export class AuthService {
 
   async signUp(userData: SignupDto) {
    try{
+
     const existingUser = await this.prisma.user.findUnique({
       where: { email: userData.email },
     });
@@ -93,7 +92,6 @@ export class AuthService {
         dob: isoDate,
       },
     });
-
     return {
       message: 'User created successfully'
     };
@@ -101,6 +99,7 @@ export class AuthService {
    catch(error){
     throw new NotFoundException('Unexpected error occured: ', error.message);
    }
+
   }
 
   async resetPassword(token: string, newPassword: string) {

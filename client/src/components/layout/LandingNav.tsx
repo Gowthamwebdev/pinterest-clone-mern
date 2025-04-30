@@ -1,15 +1,17 @@
 import { Button, TextField } from "@mui/material";
+import pinterestSvg from "../../../public/pinterest.svg";
 
 type Props = {
   onLoginClick: () => void;
+  onSignupClick: () => void;
 };
 
-const Navbar = ({ onLoginClick }: Props) => {
+const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
   return (
     <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0">
       <div className="flex items-center">
         <img
-          src="https://cdn-icons-png.flaticon.com/512/174/174863.png"
+          src={pinterestSvg}
           alt="Pinterest Logo"
           className="w-6 mx-auto mb-2 mr-2"
         />
@@ -38,17 +40,8 @@ const Navbar = ({ onLoginClick }: Props) => {
           <TextField
             placeholder="Search"
             variant="standard"
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                fontSize: 14,
-                paddingLeft: "10px",
-              },
-            }}
-            sx={{
-              width: "400px",
-              maxWidth: "400px",
-            }}
+            slotProps={{ input: { disableUnderline: true } }}
+            sx={{ fontSize: 14, paddingLeft: "10px" }}
           />
         </div>
       </div>
@@ -70,8 +63,9 @@ const Navbar = ({ onLoginClick }: Props) => {
         >
           Login
         </Button>
+
         <Button
-          onClick={onLoginClick}
+          onClick={onSignupClick}
           sx={{
             backgroundColor: "#e6e6e6",
             "&:hover": { backgroundColor: "#d9d9d9" },

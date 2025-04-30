@@ -1,24 +1,31 @@
-import { Box, Button, TextField, Typography } from '@mui/material';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { userLoginApi } from "../api/authApi";
+import { loginSchema } from "./Validations/loginSchema";
 import { useUserStore } from '../stores/userStore/userStore';
-import { userLoginApi } from '../api/authApi';
-import Cookies from 'js-cookie'
 import { useAuthStore } from '../stores/authStore';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState('');
 
   const { email, setEmail, password, setPassword } = useUserStore();
   const { setAccessToken, setIsAuthenticated } = useAuthStore();
+    
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }, } = useForm({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email, password },
+  });
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  const handleLogin = async () => {
     setLoading(true);
-
+    console.log('login fn')
     try {
       const data = await userLoginApi({ email, password });
         console.log(data.token)
@@ -27,19 +34,21 @@ const LoginForm: React.FC = () => {
         Cookies.set('token', data.token, { expires: 1 });
       navigate('/home');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Invalid email or password');
+      console.error("Login Error:",err.message);
     } finally {
       setLoading(false);
     }
   };
-
   return (
-    <Box component="form" onSubmit={handleLogin}>
+    <Box>
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
           fullWidth
           margin="normal"
+          {...register("email")}
+          error={!!errors.email}
+          helperText={errors.email?.message}
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -52,40 +61,40 @@ const LoginForm: React.FC = () => {
         <TextField
           fullWidth
           margin="normal"
-          label="Password"
+          {...register("password")}
+          error={!!errors.password}
+          helperText={errors.password?.message}
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          onChange={(e)=>setPassword(e.target.value)}
         />
       </Typography>
 
-      {error && (
-        <Typography color="error" textAlign="left">
-          {error}
-        </Typography>
-      )}
-
-      <a href="/password/reset" className="text-black normal-case hover:underline">
-        <h1 className=" flex-left text-sm normal-case text-black hover:underlinet">Forgot your password?</h1>
-      </a>
-
+      <Link to="/password/reset" className="text-black normal-case hover:underline">
+      <h1 className="text-sm text-black hover:underline flex justify-start">
+      Forgot your password?
+      </h1>
+      </Link>
       <Button
         fullWidth
         variant="contained"
         color="primary"
-        type="submit"
         disabled={loading}
         sx={{
-          mt: 2,
-          bgcolor: '#fb2c36',
-          borderRadius: 100,
-        }}
-      >
-        {loading ? 'Logging in...' : 'Login'}
-      </Button>
+        mt: 2,
+        bgcolor: "#fb2c36",
+        borderRadius: 100,
+  }}
+ onClick={()=>handleLogin()}
+>
+{loading ? "Logging in..." : "Login"}
+</Button>
     </Box>
   );
 };
 
 export default LoginForm;
+function setError(arg0: string) {
+  throw new Error("Function not implemented.");
+}
+

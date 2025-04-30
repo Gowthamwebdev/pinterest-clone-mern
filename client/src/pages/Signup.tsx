@@ -1,39 +1,32 @@
 import { Box, Button, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSignupMutation } from '../hooks/mutations/authMutations';
-import { useUserStore } from '../stores/userStore/userStore';
+import { userSignupApi } from '../api/authApi';
+
 
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const[email,setEmail]= useState("");
+    const[password, setPassword]=useState("");
+    const[dateOfBirth,setDateOfBirth]=useState("");
 
-  const { email, password, name, dateOfBirth, setEmail, setPassword, setName, setDateOfBirth } = useUserStore();
-
-  const { mutateAsync: signupMutation } = useSignupMutation();
-
-  const handleSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSignup = async () => {
     setLoading(true);
-    setError('');
-
     try {
-      await signupMutation({ name, email, password, dateOfBirth, userId: '', profileImg: '' });
-      
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } catch (err: any) {
-      setError(err.message || 'Signup failed');
-      console.error('Signup error:', err);
+      const response = await userSignupApi({ email, password, dateOfBirth });
+      console.log("Signup Successful:", response);
+      navigate("/login");
+    } catch (err) {
+      console.error(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSignup}>
+    <Box>
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
@@ -81,14 +74,20 @@ const SignUpForm: React.FC = () => {
         fullWidth
         variant="contained"
         color="primary"
-        type="submit"
         disabled={loading}
         sx={{
           mt: 2,
           bgcolor: '#fb2c36',
           borderRadius: 300,
         }}
-      >
+        onClick={()=>{
+          console.log('email',email);
+          console.log('pass',password);
+          console.log('Birthdate',dateOfBirth);
+
+        }}
+        onClick={()=>handleSignup()}
+
         {loading ? 'Signing up...' : 'SignUp'}
       </Button>
     </Box>
