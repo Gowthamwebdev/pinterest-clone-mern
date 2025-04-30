@@ -1,7 +1,7 @@
-import { userType } from '../types/userTypes';
+// import { userType } from '../types/userTypes';
 import apiClient from './apiClient';
 
-  export const userLoginApi = async ({ email, password }) => {
+  export const userLoginApi = async ({ email, password }: {email: string, password: string}) => {
   try {
     const response = await apiClient.post("/auth/login", { email, password });
     if (response.status !== 201) {
@@ -23,8 +23,9 @@ import apiClient from './apiClient';
     }
   };
 
-  export const userSignupApi = async (userData: userType) => {
+  export const userSignupApi = async (userData: {email: string, password: string, dateOfBirth: string}) => {
     try {
+      console.log(userData.email, userData.password, userData.dateOfBirth)
       const response = await apiClient.post('/auth/signup', userData);
 
       if (response.status !== 201) {

@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginApi } from "../api/authApi";
 import { loginSchema } from "./Validations/loginSchema";
 import { useUserStore } from '../stores/userStore/userStore';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../stores/AuthStore';
+import Cookies from 'js-cookie';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -33,8 +34,8 @@ const LoginForm: React.FC = () => {
         setIsAuthenticated(true);
         Cookies.set('token', data.token, { expires: 1 });
       navigate('/home');
-    } catch (err) {
-      console.error("Login Error:",err.message);
+    } catch (error) {
+      console.error("Login Error:",error.message);
     } finally {
       setLoading(false);
     }

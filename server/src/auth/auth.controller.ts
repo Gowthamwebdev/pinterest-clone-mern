@@ -23,6 +23,7 @@ export class AuthController {
     return this.authService.getUserProfile(req.user.userId);
   }
 
+  @Public()
   @Post('signup')
   async signUp(@Body() signupDto: SignupDto) {
     return this.authService.signUp(signupDto);

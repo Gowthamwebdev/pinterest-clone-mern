@@ -13,7 +13,7 @@ export class SignupDto {
     message: 'dob must be in DD-MM-YYYY format'
   })
   @IsNotEmpty()
-  dob: string;
+  dateOfBirth: string;
 
 }
 

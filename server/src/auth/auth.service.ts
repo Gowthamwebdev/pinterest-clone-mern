@@ -70,20 +70,19 @@ export class AuthService {
 
   async signUp(userData: SignupDto) {
    try{
-
+    console.log(userData.email, userData.dateOfBirth, userData.password)
     const existingUser = await this.prisma.user.findUnique({
       where: { email: userData.email },
     });
+    // console.log(existingUser);
 
     if (existingUser) {
-      throw new UnauthorizedException('User already exists');
+      throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const username = userData.email.split('@')[0];
-    const [day, month, year] = userData.dob.split('-');
-    const isoDate = new Date(`${year}-${month}-${day}`).toISOString();
-
+    const isoDate = new Date(userData.dateOfBirth).toISOString();
     await this.prisma.user.create({
       data: {
         name: username.toLowerCase().replace(/[^a-z0-9]/g, ''),
@@ -96,10 +95,16 @@ export class AuthService {
       message: 'User created successfully'
     };
    }
-   catch(error){
-    throw new NotFoundException('Unexpected error occured: ', error.message);
-   }
-
+   catch (error) {
+    throw new HttpException(
+      {
+        statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error.message || 'Unexpected error occurred',
+        error: error.response?.error || 'Internal Server Error'
+      },
+      error.status || HttpStatus.INTERNAL_SERVER_ERROR
+    );
+  }
   }
 
   async resetPassword(token: string, newPassword: string) {

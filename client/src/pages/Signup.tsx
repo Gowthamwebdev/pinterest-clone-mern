@@ -3,23 +3,29 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { userSignupApi } from '../api/authApi';
 
-
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const[email,setEmail]= useState("");
-    const[password, setPassword]=useState("");
-    const[dateOfBirth,setDateOfBirth]=useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
 
   const handleSignup = async () => {
     setLoading(true);
+    setError('');
     try {
+      console.log('email', email);
+      console.log('pass', password);
+      console.log('Birthdate', dateOfBirth);
+      
       const response = await userSignupApi({ email, password, dateOfBirth });
-      console.log("Signup Successful:", response);
-      navigate("/login");
-    } catch (err) {
+      console.log("Signup Successful:", response.message);
+      setError(response.message);
+      navigate("/");
+    } catch (err: any) {
       console.error(err.message);
+      setError(err.message || 'Signup failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,18 +86,12 @@ const SignUpForm: React.FC = () => {
           bgcolor: '#fb2c36',
           borderRadius: 300,
         }}
-        onClick={()=>{
-          console.log('email',email);
-          console.log('pass',password);
-          console.log('Birthdate',dateOfBirth);
-
-        }}
-        onClick={()=>handleSignup()}
-
+        onClick={handleSignup}
+      >
         {loading ? 'Signing up...' : 'SignUp'}
       </Button>
     </Box>
   );
 };
 
-export default SignUpForm;
+export default SignUpForm; 
