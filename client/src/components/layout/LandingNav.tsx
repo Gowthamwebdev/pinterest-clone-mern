@@ -1,24 +1,15 @@
 import { Button, TextField } from "@mui/material";
-import React, { useState } from "react";
 import pinterestSvg from "../../../public/pinterest.svg";
-
 
 type Props = {
   onLoginClick: () => void;
+  onSignupClick: () => void;
 };
 
-const Navbar = ({ onLoginClick }: Props) => {
-  const [isLoginActive, setIsLoginActive] = useState(false);
-  const handleLoginClick = () => {
-    <Button onClick={onLoginClick}>Login</Button>
-  };
-
+const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
   return (
-    <div
-      className={`w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0  ${
-        isLoginActive ? "opacity-50 pointer-events-none" : ""
-      }`}
-    >
+    <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0">
+      {/* Left */}
       <div className="flex items-center">
         <img
           src={pinterestSvg}
@@ -50,60 +41,52 @@ const Navbar = ({ onLoginClick }: Props) => {
           <TextField
             placeholder="Search"
             variant="standard"
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                fontSize: 14,
-                paddingLeft: "10px",
-              },
-            }}
-            sx={{
-              width: "400px",
-              maxWidth: "400px",
-            }}
+            slotProps={{ input: { disableUnderline: true } }}
+            sx={{ fontSize: 14, paddingLeft: "10px" }}
           />
         </div>
       </div>
 
+      {/* Right */}
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
           onClick={onLoginClick}
-            sx={{
-              backgroundColor: "#e60023",
-              "&:hover": { backgroundColor: "#ad081b" },
-              boxShadow: "none",
-              color: "white",
-              borderRadius: "30px",
-              fontWeight: "bold",
-              textTransform: "none",
-              padding: "8px 15px",
-              fontSize: "15px",
-              fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
-            }}
-          >
-            Login
-          </Button>
-          <Button
-            onClick={(!onLoginClick)}
-            sx={{
-              backgroundColor: "#e6e6e6",
-              "&:hover": { backgroundColor: "#d9d9d9" },
-              boxShadow: "none",
-              color: "black",
-              borderRadius: "30px",
-              fontWeight: "bold",
-              textTransform: "none",
-              padding: "8px 15px",
-              fontSize: "15px",
-              fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
-            }}
-          >
-            Sign up
-          </Button>
-        </div>
+          sx={{
+            backgroundColor: "#e60023",
+            "&:hover": { backgroundColor: "#ad081b" },
+            boxShadow: "none",
+            color: "white",
+            borderRadius: "30px",
+            fontWeight: "bold",
+            textTransform: "none",
+            padding: "8px 15px",
+            fontSize: "15px",
+            fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
+          }}
+        >
+          Login
+        </Button>
+
+        <Button
+          onClick={onSignupClick}
+          sx={{
+            backgroundColor: "#e6e6e6",
+            "&:hover": { backgroundColor: "#d9d9d9" },
+            boxShadow: "none",
+            color: "black",
+            borderRadius: "30px",
+            fontWeight: "bold",
+            textTransform: "none",
+            padding: "8px 15px",
+            fontSize: "15px",
+            fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
+          }}
+        >
+          Sign up
+        </Button>
       </div>
-    );
-  };
-  
-  export default Navbar;
-  
+    </div>
+  );
+};
+
+export default Navbar;

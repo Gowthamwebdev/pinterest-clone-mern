@@ -9,10 +9,11 @@ import { useAuthStore } from "../stores/authStore";
 
 type AuthModalProps = {
 onClose: () => void;
+defaultType: "login" | "signup";
 };
 
-const AuthModal: React.FC<AuthModalProps> = ({ onClose }) => {
-const [isLogin, setIsLogin] = useState(true);
+const AuthModal: React.FC<AuthModalProps> = ({ onClose, defaultType }) => {
+    const [isLogin, setIsLogin] = useState(defaultType === "login");
 
 return (
     <div className="fixed inset-0 backdrop-blur-md bg-white/30 flex items-center justify-center">

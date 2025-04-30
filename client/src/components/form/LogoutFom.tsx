@@ -1,6 +1,6 @@
-  import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../stores/authStore';
+  import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useAuthStore } from '../../stores/AuthStore';
 
 const LogoutForm = () => {
   const navigate = useNavigate();

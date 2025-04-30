@@ -1,13 +1,15 @@
 import { Avatar, Button, IconButton, Menu, MenuItem, TextField } from '@mui/material';
 import React from 'react';
-import { FiChevronDown } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../../stores/authStore';
+import { FiChevronDown } from 'react-icons/fi';
+import { useAuthStore } from '../../stores/AuthStore';
 import LogoutForm from '../form/LogoutFom';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, resetAuth } = useAuthStore();
+  const { openModal }=useAuthStore();
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -76,21 +78,19 @@ const Navbar: React.FC = () => {
         ) : (
           <>
             <Button
-            onClick={() => openModal("Signup")}
               variant="text"
               sx={{
                 color: "black",
                 fontWeight: "bold",
                 textTransform: 'none',
               }}
-              onClick={() => handleNavigation('/signup')}
+              onClick={() => openModal(false)}
             >
               Signup
             </Button>
             <Button
-            onClick={() => openModal("login")}
               variant="outlined"
-              onClick={() => handleNavigation('/login')}
+              onClick={() => openModal(true)}
               sx={{
                 backgroundColor: '#e60023',
                 '&:hover': { backgroundColor: '#ad081b' },

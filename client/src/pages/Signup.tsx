@@ -1,124 +1,94 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSignupMutation } from "../hooks/mutations/authMutations";
-import { useUserStore } from "../stores/userStore/userStore";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema } from "./Validations/signupSchema";
+import { Box, Button, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { userSignupApi } from '../api/authApi';
+
 
 const SignUpForm: React.FC = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
-  const { email, setEmail, password, setPassword, name, setName, dateOfBirth, setDateOfBirth } = useUserStore();
-  const signupMutation = useSignupMutation();
-  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const[email,setEmail]= useState("");
+    const[password, setPassword]=useState("");
+    const[dateOfBirth,setDateOfBirth]=useState("");
 
-  const handleTogglePasswordVisibility = () => setShowPassword((prev) => !prev);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(signupSchema),
-    defaultValues: { email, password, dateOfBirth },
-  });
-
-  const handleSignup = async (data: any): Promise<boolean> => {
+  const handleSignup = async () => {
     setLoading(true);
     try {
-      const userData={
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        dateOfBirth: data.dateOfBirth,
-        userId: "",
-        profileImg: "",
-      };
-      
-      await signupMutation(userData);
-      useUserStore.setState({user:userData});
-      console.log("Stored user Data in authStore");
-      return true;
-    
-    } catch (err: any) {
-      console.error("Signup error:", err.message || "Signup failed");
-      return false;
-    
+      const response = await userSignupApi({ email, password, dateOfBirth });
+      console.log("Signup Successful:", response);
+      navigate("/login");
+    } catch (err) {
+      console.error(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(handleSignup)} sx={{ maxWidth: "400px", margin: "0 auto" }}>
-      <Typography textAlign="left" sx={{ mb: 1, fontSize: "14px" }}>
-        Email
+    <Box>
+      <Typography textAlign="left">
+        <h1>Email</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </Typography>
-      <TextField
-        fullWidth
-        margin="dense"
-        placeholder="Enter your email"
-        {...register("email")}
-        error={!!errors.email}
-        helperText={errors.email?.message}
-        InputLabelProps={{ shrink: true }}
-        sx={{ mb: 1 }}
-      />
 
-      <Typography textAlign="left" sx={{ mb: 1, fontSize: "14px" }}>
-        Password
+      <Typography textAlign="left">
+        <h1>Password</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </Typography>
-      <TextField
-        fullWidth
-        margin="dense"
-        placeholder="Enter your password"
-        {...register("password")}
-        error={!!errors.password}
-        helperText={errors.password?.message}
-        type="password"
-        InputLabelProps={{ shrink: true }}
-        sx={{ mb: 1 }}
-      />
 
-      <Typography textAlign="left" sx={{ mb: 1, fontSize: "14px" }}>
-        Birthdate
+      <Typography textAlign="left">
+        <h1>Birthdate</h1>
+        <TextField
+          fullWidth
+          margin="normal"
+          type="date"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
       </Typography>
-      <TextField
-        fullWidth
-        margin="dense"
-        placeholder="Select your birthdate"
-        {...register("dateOfBirth")}
-        error={!!errors.dateOfBirth}
-        helperText={errors.dateOfBirth?.message}
-        type="date"
-        InputLabelProps={{ shrink: true }}
-        sx={{ mb: 1 }}
-      />
 
-<Button
+      {error && (
+        <Typography color="error" textAlign="left">
+          {error}
+        </Typography>
+      )}
+
+      <Button
         fullWidth
         variant="contained"
         color="primary"
-        type="submit"
         disabled={loading}
         sx={{
-          mt: 1,
-          bgcolor: "#e60023",
-          borderRadius: "30px",
-          padding: "10px",
-          fontWeight: "bold",
-          textTransform: "none",
+          mt: 2,
+          bgcolor: '#fb2c36',
+          borderRadius: 300,
         }}
-        onClick={handleSubmit(async (data) => {
-          const isSignedUp = await handleSignup(data);
-          if (isSignedUp) {
-            navigate("/login");
-          }
-        })}
+        onClick={()=>{
+          console.log('email',email);
+          console.log('pass',password);
+          console.log('Birthdate',dateOfBirth);
+
+        }}
+        onClick={()=>handleSignup()}
       >
-        {loading ? "Signing up..." : "SignUp"}
+        {loading ? 'Signing up...' : 'SignUp'}
       </Button>
     </Box>
   );

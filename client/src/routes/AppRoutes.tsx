@@ -33,7 +33,7 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LandingPage />} />
-        <Route path="password/-reset" element={<ResetPasswordForm />} />
+        <Route path="/password/reset" element={<ResetPasswordForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Signup" element={<SignUpForm />} />
       </Route>
@@ -49,5 +49,6 @@ const AppRoutes = () => {
     </Routes>
   );
 };
+
 
 export default AppRoutes;

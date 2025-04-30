@@ -3,16 +3,14 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../hooks/mutations/authMutations";
+import { userLoginApi } from "../api/authApi";
 import { loginSchema } from "./Validations/loginSchema";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  const loginMutation = useLoginMutation();
   const[email,setEmail]= useState("");
   const[password, setPassword]=useState("");
-
 
   const {
     register,
@@ -22,25 +20,18 @@ const LoginForm: React.FC = () => {
     defaultValues: { email, password },
   });
 
-  const handleLogin = async (e:any) => {
+  const handleLogin = async () => {
     setLoading(true);
-    console.log("head");
-    
-
-  try {
-    await loginMutation.mutateAsync({
-      email,
-      password,
-      userId: "",
-      name: "",
-      profileImg: ""
-    });
-    navigate('/home');
-  } catch (err) {
-    setError(err instanceof Error ? err.message : 'Invalid email or password');
-  } finally {
-    setLoading(false);
-   }
+    console.log('login fn')
+    try {
+      const response = await userLoginApi({ email, password });
+      console.log("Login Successful:", response); 
+      navigate("/home");
+    } catch (err) {
+      console.error("Login Error:",err.message);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <Box>
@@ -55,6 +46,7 @@ const LoginForm: React.FC = () => {
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </Typography>
 
@@ -73,34 +65,25 @@ const LoginForm: React.FC = () => {
         />
       </Typography>
 
-      <Link to="password/-reset" className="text-black normal-case hover:underline">
-        <h1 className="flex-left text-sm normal-case text-black hover:underline">
-          Forgot your password?
-        </h1>
+      <Link to="/password/reset" className="text-black normal-case hover:underline">
+      <h1 className="text-sm text-black hover:underline flex justify-start">
+      Forgot your password?
+      </h1>
       </Link>
-      <Button
-  fullWidth
-  variant="contained"
-  color="primary"
-  
-  disabled={loading}
-  sx={{
-    mt: 2,
-    bgcolor: "#fb2c36",
-    borderRadius: 100,
-  }}
-  onClick={() => {
-    // const isLoggedIn = await handleLogin(data);
-console.log('in button');
 
-console.log('email',email);
-console.log('pass',password);
-if(isLoggedIn){
-  navigate('/home');
-}
+      <Button
+        fullWidth
+        variant="contained"
+        color="primary"
+        disabled={loading}
+        sx={{
+        mt: 2,
+        bgcolor: "#fb2c36",
+        borderRadius: 100,
   }}
+ onClick={()=>handleLogin()}
 >
-  {loading ? "Logging in..." : "Login"}
+{loading ? "Logging in..." : "Login"}
 </Button>
 
     </Box>
