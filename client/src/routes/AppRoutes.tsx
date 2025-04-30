@@ -1,15 +1,15 @@
-import { Route, Routes, Navigate, Outlet } from "react-router-dom";
-import { useAuthStore } from "../stores/AuthStore";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import ResetPasswordForm from "../components/form/ResetPasswordForm";
+import Layout from "../components/layout/Layout";
+import { useAuth } from "../hooks/useAuth";
 import CreatePost from "../pages/CreatePost";
 import Explore from "../pages/Explore";
 import Home from "../pages/Home";
+import LandingPage from "../pages/LandingPage";
 import Login from "../pages/Login";
 import Settings from "../pages/Settings";
-import ResetPasswordForm from "../components/form/ResetPasswordForm";
-import ResetPage from "../components/form/ResetPage";
-import LandingPage from "../pages/LandingPage";
-import Layout from "../components/layout/Layout";
-import { useAuth } from "../hooks/useAuth";
+import SignUpForm from "../pages/Signup";
+import { useAuthStore } from "../stores/authStore";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuthStore();
@@ -17,7 +17,7 @@ const AppRoutes = () => {
 
   const ProtectedRoute = () => {
     if (!isAuthenticated || !token) {
-      return <Navigate to="/" replace state={{ from: window.location.pathname }} />;
+      return <Navigate to="/" replace state={{ from: location }} />;
     }
     return <Layout><Outlet /></Layout>;
   };
@@ -32,10 +32,10 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<PublicRoute />}>
-        <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
-        <Route path="/reset-password" element={<ResetPasswordForm />} />
-        <Route path="/password/-reset" element={<ResetPage />} />
+        <Route path="/password/reset" element={<ResetPasswordForm />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/Signup" element={<SignUpForm />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

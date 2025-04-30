@@ -7,7 +7,6 @@ interface appState {
   setNotification: (notification: boolean) => void;
   setSetting: (setting: boolean) => void;
 }
-
 export const useUiStore = create<appState>((set) => ({
   notification: false,
   setting: false,
