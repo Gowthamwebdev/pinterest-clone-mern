@@ -9,7 +9,6 @@ type Props = {
 const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
   return (
     <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0">
-      {/* Left */}
       <div className="flex items-center">
         <img
           src={pinterestSvg}
@@ -39,6 +38,7 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
         </Button>
         <div className="flex items-center bg-[#f5f5f5] px-2 py-1 rounded-lg">
           <TextField
+            fullWidth
             placeholder="Search"
             variant="standard"
             slotProps={{ input: { disableUnderline: true } }}
@@ -46,8 +46,6 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
           />
         </div>
       </div>
-
-      {/* Right */}
       <div style={{ display: "flex", gap: "1rem" }}>
         <Button
           onClick={onLoginClick}
@@ -88,5 +86,4 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
     </div>
   );
 };
-
 export default Navbar;
