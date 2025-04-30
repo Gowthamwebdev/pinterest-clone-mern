@@ -6,7 +6,6 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Settings from "../pages/Settings";
 import ResetPasswordForm from "../components/form/ResetPasswordForm";
-import ResetPage from "../components/form/ResetPage";
 import LandingPage from "../pages/LandingPage";
 import Layout from "../components/layout/Layout";
 import { useAuth } from "../hooks/useAuth";
@@ -35,7 +34,6 @@ const AppRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
-        <Route path="/password/-reset" element={<ResetPage />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>
