@@ -5,13 +5,16 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginApi } from "../api/authApi";
 import { loginSchema } from "./Validations/loginSchema";
+import { useUserStore } from '../stores/userStore/userStore';
+import { useAuthStore } from '../stores/authStore';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  const[email,setEmail]= useState("");
-  const[password, setPassword]=useState("");
 
+  const { email, setEmail, password, setPassword } = useUserStore();
+  const { setAccessToken, setIsAuthenticated } = useAuthStore();
+    
   const {
     register,
     handleSubmit,
@@ -24,9 +27,12 @@ const LoginForm: React.FC = () => {
     setLoading(true);
     console.log('login fn')
     try {
-      const response = await userLoginApi({ email, password });
-      console.log("Login Successful:", response); 
-      navigate("/home");
+      const data = await userLoginApi({ email, password });
+        console.log(data.token)
+        setAccessToken(data.token);
+        setIsAuthenticated(true);
+        Cookies.set('token', data.token, { expires: 1 });
+      navigate('/home');
     } catch (err) {
       console.error("Login Error:",err.message);
     } finally {

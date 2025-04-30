@@ -25,8 +25,12 @@ export class AuthService {
     }
   }
 
-  login(user: LoginDto) {
+  async login(userData: LoginDto) {
     try{
+      const user = await this.validateUser(userData.email, userData.password);
+      if(!user){
+        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+      }
       const payload = { 
         sub: user.id,  
         userId: user.id 
@@ -76,12 +80,16 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const username = userData.email.split('@')[0];
+    const [day, month, year] = userData.dob.split('-');
+    const isoDate = new Date(`${year}-${month}-${day}`).toISOString();
+
     await this.prisma.user.create({
       data: {
-        name: userData.name,
+        name: username.toLowerCase().replace(/[^a-z0-9]/g, ''),
         email: userData.email,
         password: hashedPassword,
-        profile_img: userData.profile_img || '',
+        dob: isoDate,
       },
     });
     return {
@@ -93,4 +101,25 @@ export class AuthService {
    }
 
   }
+
+  async resetPassword(token: string, newPassword: string) {
+    try {
+      const payload = this.jwtService.verify(token);
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      
+      await this.prisma.user.update({
+        where: { email: payload.email },
+        data: { password: hashedPassword },
+      });
+      console.log('reset password functioned successfully')
+      return {
+        message: 'Password changes successfully'
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Unexpected error occured', HttpStatus.BAD_REQUEST);
+    }
+  }
+
 }
