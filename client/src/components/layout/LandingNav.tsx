@@ -1,5 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import pinterestSvg from "../../../public/pinterest.svg";
+import { Search } from "@mui/icons-material"
 
 type Props = {
   onLoginClick: () => void;
@@ -36,14 +37,20 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
         >
           Explore
         </Button>
-        <div className="flex items-center bg-[#f5f5f5] px-2 py-1 rounded-lg">
-          <TextField
-            fullWidth
-            placeholder="Search"
-            variant="standard"
-            slotProps={{ input: { disableUnderline: true } }}
-            sx={{ fontSize: 14, paddingLeft: "10px" }}
-          />
+        <div className="flex items-center bg-[#f5f5f5] px-4 py-2 rounded-full w-full">
+        <Search className="text-gray-500 mr-2" />
+        <TextField
+        fullWidth
+        placeholder="Search"
+        variant="standard"
+        slotProps={{ input: { disableUnderline: true } }}
+        sx={{
+        fontSize: 14,
+        paddingLeft: "10px",
+        width: "100%",
+        }}
+        />
+
         </div>
       </div>
       <div style={{ display: "flex", gap: "1rem" }}>

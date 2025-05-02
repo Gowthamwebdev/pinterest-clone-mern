@@ -1,104 +1,102 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Search, Close } from "@mui/icons-material";
+import LandingNav from "../../components/layout/LandingNav";
+import { resetPasswordApi } from "../../api/authApi";
 
-const ResetPasswordForm: React.FC = () => {
+const ResetPasswordPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [resetMode, setResetMode] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSearch = async () => {
     if (!email.includes("@")) return;
-    // Optional: verify if the email exists
+    setLoading(true);
+
     try {
-      const response = await axios.post("/api/auth/verify-email", { email });
-      if (response.data.exists) {
-        setResetMode(true);
-      } else {
-        alert("Account not found");
-      }
+
+      setResetMode(true);
     } catch (error) {
-      console.error("Email verification failed:", error);
       alert("Something went wrong.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleReset = async () => {
-    if (newPassword !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
+  const handleResetPassword = async () => {
+    setResetLoading(true);
     try {
-      await axios.post("/api/auth/reset-password", {
-        email,
-        password: newPassword,
-      });
-      alert("Password reset successful!");
-      navigate("/login");
-    } catch (error) {
-      console.error("Reset failed:", error);
-      alert("Failed to reset password");
+      await resetPasswordApi(email, "NewRandomPassword123!"); 
+      alert("Password reset email sent!");
+      navigate("/login"); 
+      alert(error.message || "Failed to reset password.");
+    } finally {
+      setResetLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 pt-20 px-4">
-      {!resetMode ? (
-        <>
-          <h1 className="text-2xl font-bold text-gray-900 mb-3 text-center">Let's find your Pinterest account</h1>
-          <p className="text-gray-600 mb-5 text-center text-lg">What's your email, name, or username?</p>
+    <div className="relative min-h-screen bg-white">
+      <LandingNav />
 
-          <div className="w-full max-w-md">
-            <div className="flex items-center bg-white border border-gray-300 rounded-full shadow-md px-3 py-3">
+      <div className="flex flex-col items-center pt-24 px-4">
+        <h1 className="text-3xl font-semibold text-black mb-4 mt-0 text-center">
+          {resetMode ? "Reset your password" : "Let's find your Pinterest account"}
+        </h1>
+
+        <p className="text-gray-600 text-center text-sm mb-5">
+          What's your email, name, or username?
+        </p>
+
+        <div className="w-full max-w-md">
+          <div className="w-full max-w-md flex items-center gap-3">
+            <div className="flex flex-grow items-center bg-white border border-gray-300 rounded-full shadow-md px-3 py-3 gap-2 hover:border-gray-400 transition">
+              {!resetMode ? <Search className="text-gray-500" /> : null}
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="w-full px-2 bg-transparent text-gray-700 focus:outline-none"
+                placeholder="Search"
+                className="w-full bg-transparent text-gray-700 focus:outline-none"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
               />
-              <button
-                className={`bg-red-600 text-white font-semibold px-6 py-2 rounded-full transition ${
-                  !email.includes("@") ? "opacity-50 cursor-not-allowed" : "hover:bg-red-700"
-                }`}
-                disabled={!email.includes("@")}
-                onClick={handleSearch}
-              >
-                Search
-              </button>
+              {resetMode && (
+                <button onClick={() => setResetMode(false)} className="text-gray-500">
+                  <Close />
+                </button>
+              )}
             </div>
+
+            <button
+              className={`bg-red-600 text-white font-semibold px-6 py-3 rounded-full transition-all ${
+                !email.includes("@") || resetMode || loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-red-700 hover:scale-105 hover:shadow-lg cursor-pointer"
+              }`}
+              disabled={!email.includes("@") || resetMode || loading}
+              onClick={handleSearch}
+            >
+              {loading ? "Searching..." : "Search"}
+            </button>
           </div>
-        </>
-      ) : (
-        <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">Reset your password</h1>
-          <input
-            type="password"
-            placeholder="New password"
-            className="w-full mb-4 px-4 py-3 border border-gray-300 rounded-md focus:outline-none"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Confirm new password"
-            className="w-full mb-6 px-4 py-3 border border-gray-300 rounded-md focus:outline-none"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-          <button
-            className="w-full bg-red-600 text-white text-lg font-semibold px-6 py-3 rounded-full hover:bg-red-700 transition"
-            onClick={handleReset}
-          >
-            Reset Password
-          </button>
         </div>
-      )}
+
+        {resetMode && (
+          <button
+            className={`w-full max-w-md bg-red-600 text-white font-semibold text-lg px-6 py-2 rounded-full mt-6 hover:bg-red-700 transition ${
+              resetLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            onClick={handleResetPassword}
+            disabled={resetLoading}
+          >
+            {resetLoading ? "Sending..." : "Send a password reset email"}
+          </button>
+        )}
+      </div>
     </div>
   );
 };
 
-export default ResetPasswordForm;
+export default ResetPasswordPage;
