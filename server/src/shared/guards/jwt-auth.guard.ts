@@ -24,6 +24,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err: any, user: any, info: any, context: ExecutionContext) {
+
+    if (info && info.message === 'No auth token') {
+      throw new UnauthorizedException('No token provided');
+    }
+    
     if (err || !user) {
       throw err || new UnauthorizedException('Invalid or expired token');
     }

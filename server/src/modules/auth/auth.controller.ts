@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { LoginDto, SignupDto } from './dto/auth.dto';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { Public } from 'src/shared/decorators/public.decorator';
-import { MailerService } from 'src/mailer/mailer.service';
+import { MailerService } from 'src/modules/mailer/mailer.service';
 
 @Controller('auth')
 export class AuthController {
