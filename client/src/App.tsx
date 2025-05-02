@@ -5,9 +5,8 @@ import { useAuthStore } from "./stores/AuthStore";
 import Cookies from "js-cookie";
 
 function App() {
-  const { setIsAuthenticated, setAccessToken } = useAuthStore();
 
-  // Rehydrate Zustand state from cookie on page load
+  const { setIsAuthenticated, setAccessToken } = useAuthStore();
   useEffect(() => {
     const token = Cookies.get("token");
 

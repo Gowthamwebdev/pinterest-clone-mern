@@ -22,8 +22,8 @@ export const userLoginApi = async ({ email, password }: { email: string; passwor
     if (response.status !== 200) {
       throw new Error('Invalid credentials');
     }
-
     return response.data;
+  
   } catch (error) {
     throw handleApiError(error);
   }
@@ -47,7 +47,6 @@ export const userSignupApi = async (userData: userType) => {
     if (response.status !== 201) {
       throw new Error('Signup failed');
     }
-
     return response.data;
   } catch (error: any) {
     throw handleApiError(error);

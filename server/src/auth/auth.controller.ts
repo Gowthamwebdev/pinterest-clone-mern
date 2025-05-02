@@ -1,20 +1,22 @@
-// src/auth/auth.controller.ts
-import { Controller, Post, Body, Get, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Request, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, SignupDto } from './dto/auth.dto';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { Public } from 'src/shared/decorators/public.decorator';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+    private mailerService: MailerService,) {}
 
+  @Public()
   @Post('login')
-  @UseGuards(LocalAuthGuard)
-  async login(@Body() loginDto: LoginDto) {
+  // @UseGuards(LocalAuthGuard)
+  login(@Body() loginDto: LoginDto) { 
+    console.log('controller ',loginDto);
     return this.authService.login(loginDto);
   }
-
   @Get('profile')
   @UseGuards(JwtAuthGuard)
   async getProfile(@Request() req) {
@@ -24,5 +26,24 @@ export class AuthController {
   @Post('signup')
   async signUp(@Body() signupDto: SignupDto) {
     return this.authService.signUp(signupDto);
+  }
+  
+  @Public()
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    await this.mailerService.sendPasswordResetEmail(email);
+    return { message: 'A reset email has been sent to your mail address' };
+  }
+
+  @Public()
+  @UseGuards(JwtAuthGuard)
+  @Post('reset-password')
+  async resetPassword(
+    @Body() token,
+    @Body('newPassword') newPassword: string,
+  ) {
+    const result = await this.authService.resetPassword(token, newPassword);
+    if (!result) throw new BadRequestException('Invalid or expired token');
+    return { message: 'Password successfully reset' };
   }
 }
