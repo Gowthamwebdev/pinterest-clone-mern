@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import Cookies from 'js-cookie';
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginApi } from "../api/authApi";
+import { useAuthStore } from "../stores/AuthStore";
 import { loginSchema } from "./Validations/loginSchema";
 import { useUserStore } from '../stores/userStore/userStore';
 import { useAuthStore } from '../stores/authStore';
@@ -11,7 +13,9 @@ import { useAuthStore } from '../stores/authStore';
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-
+  const[email,setEmail]= useState("");
+  const[password, setPassword]=useState("");
+  const { setAccessToken, setIsAuthenticated } = useAuthStore();
   const { email, setEmail, password, setPassword } = useUserStore();
   const { setAccessToken, setIsAuthenticated } = useAuthStore();
     
@@ -25,7 +29,6 @@ const LoginForm: React.FC = () => {
 
   const handleLogin = async () => {
     setLoading(true);
-    console.log('login fn')
     try {
       const data = await userLoginApi({ email, password });
         console.log(data.token)
@@ -34,7 +37,7 @@ const LoginForm: React.FC = () => {
         Cookies.set('token', data.token, { expires: 1 });
       navigate('/home');
     } catch (err) {
-      console.error("Login Error:",err.message);
+      setError(err instanceof Error ? err.message : 'Invalid email or password');
     } finally {
       setLoading(false);
     }
@@ -44,12 +47,12 @@ const LoginForm: React.FC = () => {
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
+          placeholder="Email"
           fullWidth
           margin="normal"
           {...register("email")}
           error={!!errors.email}
           helperText={errors.email?.message}
-          label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -59,6 +62,7 @@ const LoginForm: React.FC = () => {
       <Typography textAlign="left">
         <h1>Password</h1>
         <TextField
+          placeholder="Password"
           fullWidth
           margin="normal"
           {...register("password")}
@@ -69,12 +73,13 @@ const LoginForm: React.FC = () => {
           onChange={(e)=>setPassword(e.target.value)}
         />
       </Typography>
-
-      <Link to="/password/reset" className="text-black normal-case hover:underline">
+      
+      <Link to="password/reset" className="text-black normal-case hover:underline">
       <h1 className="text-sm text-black hover:underline flex justify-start">
       Forgot your password?
       </h1>
       </Link>
+
       <Button
         fullWidth
         variant="contained"
@@ -85,7 +90,7 @@ const LoginForm: React.FC = () => {
         bgcolor: "#fb2c36",
         borderRadius: 100,
   }}
- onClick={()=>handleLogin()}
+  onClick={()=>handleLogin()}
 >
 {loading ? "Logging in..." : "Login"}
 </Button>
