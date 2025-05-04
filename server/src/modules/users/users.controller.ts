@@ -1,4 +1,10 @@
-import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './users.service';
 import { Public } from '../../shared/decorators/public.decorator';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
@@ -14,5 +20,5 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  async editUserDetails(){}
+  async editUserDetails() {}
 }

@@ -9,12 +9,8 @@ export class CreatePinDto {
   @IsOptional()
   description?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  image_url: string;
-
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  tags?: string[];
+  tags?: string;
 }

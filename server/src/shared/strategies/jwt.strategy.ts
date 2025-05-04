@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
     const secret = process.env.JWT_SECRET;
-    console.log(secret)
+    console.log(secret);
     if (!secret) {
       throw new Error('JWT_SECRET environment variable is not set');
     }

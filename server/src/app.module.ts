@@ -11,8 +11,6 @@ import { UserModule } from './modules/users/users.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-      consumer
-        .apply(LoggerMiddleware)
-        .forRoutes('*');
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
