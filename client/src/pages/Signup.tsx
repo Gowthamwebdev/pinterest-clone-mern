@@ -36,9 +36,9 @@ const SignUpForm: React.FC = () => {
       <Typography textAlign="left">
         <h1>Email</h1>
         <TextField
+        placeholder='Email'
           fullWidth
           margin="normal"
-          label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -47,9 +47,9 @@ const SignUpForm: React.FC = () => {
       <Typography textAlign="left">
         <h1>Password</h1>
         <TextField
+        placeholder='Create your password'
           fullWidth
           margin="normal"
-          label="Password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -62,9 +62,12 @@ const SignUpForm: React.FC = () => {
           fullWidth
           margin="normal"
           type="date"
-          InputLabelProps={{
-            shrink: true,
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
           }}
+          
           value={dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
         />
