@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { v2 as Cloudinary } from 'cloudinary';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePinDto } from './dto/create-pin.dto';
+import { CreatePostDto } from './dto/create-post.dto';
 
 interface CloudinaryUploadResult {
   secure_url: string;
@@ -41,9 +41,9 @@ export class PinService {
     });
   }
 
-  async createPin(
+  async createPost(
     userId: number,
-    body: CreatePinDto,
+    body: CreatePostDto,
     image: Express.Multer.File,
   ) {
     // Validate inputs
@@ -72,17 +72,17 @@ export class PinService {
     }
 
     try {
-      // const result = await this.uploadToCloudinary(image);
+      const result = await this.uploadToCloudinary(image);
 
-      // const createdPin = await this.prisma.pin.create({
-      //   data: {
-      //     title: body.title,
-      //     description: body.description || null,
-      //     tags: body.tags ? body.tags.split(',') : [],
-      //     image_url: result.secure_url,
-      //     user_id: userId,
-      //   },
-      // });
+      await this.prisma.pin.create({
+        data: {
+          title: body.title,
+          description: body.description || null,
+          tags: body.tags ? body.tags.split(',') : [],
+          image_url: result.secure_url,
+          user_id: userId,
+        },
+      });
 
       return {
         statusCode: HttpStatus.CREATED,

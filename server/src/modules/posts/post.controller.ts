@@ -13,12 +13,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
-import { CreatePinDto } from './dto/create-pin.dto';
-import { PinService } from './pins.service';
+import { PinService } from './post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreatePostDto } from './dto/create-post.dto';
 
 @Controller('pins')
-export class PinController {
+export class PostController {
   constructor(private pinService: PinService) {}
 
   @Post()
@@ -28,9 +28,9 @@ export class PinController {
   async createPin(
     @Request() req,
     @UploadedFile() image: Express.Multer.File,
-    @Body() createPinDto: CreatePinDto,
+    @Body() createPinDto: CreatePostDto,
   ) {
-    return this.pinService.createPin(req.user.userId, createPinDto, image);
+    return this.pinService.createPost(req.user.userId, createPinDto, image);
   }
 
   @Get()

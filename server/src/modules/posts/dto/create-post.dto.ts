@@ -1,6 +1,6 @@
 import { IsString, IsNotEmpty, IsOptional, IsArray } from 'class-validator';
 
-export class CreatePinDto {
+export class CreatePostDto {
   @IsString()
   @IsNotEmpty()
   title: string;

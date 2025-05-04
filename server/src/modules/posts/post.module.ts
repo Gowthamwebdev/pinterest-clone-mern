@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PinController } from './pins.controller';
-import { PinService } from './pins.service';
+import { PinService } from './post.service';
 import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule } from '@nestjs/config';
 import { CloudinaryProvider } from 'src/config/cloudinary.provider';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PostController } from './post.controller';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
     }),
     ConfigModule,
   ],
-  controllers: [PinController],
+  controllers: [PostController],
   providers: [PinService, PrismaService, CloudinaryProvider],
 })
-export class PinModule {}
+export class PostModule {}

@@ -7,9 +7,22 @@
     "server"
   ],
   "scripts": {
-  "dev": "concurrently \"pnpm --filter client run dev\" \"pnpm --filter server run start:dev\""
+    "dev": "concurrently \"pnpm --filter client run dev\" \"pnpm --filter server run start:dev\"",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "pnpm exec prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "pnpm exec prettier --write"
+    ]
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "eslint": "^9.26.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3"
   }
 }
