@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import pinterestSvg from "../../public/pinterest.svg";
 import LoginForm from "./Login";
 import SignupForm from "./Signup";
-import { useAuthStore } from "../stores/authStore";
+import { useAuthStore } from "../stores/AuthStore";
 
 type AuthModalProps = {
 onClose: () => void;

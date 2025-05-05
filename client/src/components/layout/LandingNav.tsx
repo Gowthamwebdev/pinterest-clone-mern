@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import pinterestSvg from "../../../public/pinterest.svg";
-import { Search } from "@mui/icons-material"
+import { Search } from "@mui/icons-material";
 
 type Props = {
   onLoginClick: () => void;
@@ -9,51 +9,41 @@ type Props = {
 
 const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
   return (
-    <div className="w-full flex items-center justify-between px-6 py-3 bg-white shadow sticky top-0">
-      <div className="flex items-center">
+    <div className="w-full flex items-center justify-between px-4 py-2 bg-white shadow sticky top-0">
+      <div className="flex items-center gap-4">
         <img
           src={pinterestSvg}
           alt="Pinterest Logo"
-          className="w-6 mx-auto mb-2 mr-2"
+          className="w-5 h-5"
         />
-        <span
-          style={{
-            fontSize: "20px",
-            fontWeight: "bold",
-            color: "#e60023",
-            marginRight: "20px",
-          }}
-        >
-          Pinterest
-        </span>
+        <span className="text-lg font-bold text-[#e60023]">Pinterest</span>
         <Button
           variant="text"
           sx={{
             color: "black",
             fontWeight: "bold",
             textTransform: "none",
-            marginRight: "20px",
+            fontSize: "14px",
+            minWidth: "auto",
+            padding: "4px 8px",
           }}
         >
           Explore
         </Button>
-        <div className="flex items-center bg-[#f5f5f5] px-4 py-2 rounded-full w-full">
-        <Search className="text-gray-500 mr-2" />
-        <TextField
-        fullWidth
-        placeholder="Search"
-        variant="standard"
-        slotProps={{ input: { disableUnderline: true } }}
-        sx={{
-        fontSize: 14,
-        paddingLeft: "10px",
-        width: "100%",
-        }}
-        />
-
+        <div className="flex items-center bg-[#f5f5f5] px-3 py-1 rounded-full w-full max-w-md">
+          <Search className="text-gray-500 mr-2" fontSize="small" />
+          <TextField
+            fullWidth
+            placeholder="Search"
+            variant="standard"
+            InputProps={{ disableUnderline: true }}
+            sx={{
+              fontSize: 14,
+            }}
+          />
         </div>
       </div>
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div className="flex items-center gap-2">
         <Button
           onClick={onLoginClick}
           sx={{
@@ -64,8 +54,8 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
             borderRadius: "30px",
             fontWeight: "bold",
             textTransform: "none",
-            padding: "8px 15px",
-            fontSize: "15px",
+            padding: "6px 12px",
+            fontSize: "14px",
             fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
           }}
         >
@@ -82,8 +72,8 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
             borderRadius: "30px",
             fontWeight: "bold",
             textTransform: "none",
-            padding: "8px 15px",
-            fontSize: "15px",
+            padding: "6px 12px",
+            fontSize: "14px",
             fontFamily: "Neue Haas Grotesk, Arial, Helvetica, sans-serif",
           }}
         >
@@ -93,4 +83,5 @@ const Navbar = ({ onLoginClick, onSignupClick }: Props) => {
     </div>
   );
 };
+
 export default Navbar;

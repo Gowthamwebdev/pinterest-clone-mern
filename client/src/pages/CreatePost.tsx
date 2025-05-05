@@ -1,4 +1,4 @@
-// pages/CreatePost.tsx
+
 'use client';
 
 import React, { useState } from 'react';

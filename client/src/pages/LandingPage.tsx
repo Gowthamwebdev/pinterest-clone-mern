@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AuthModal from "./AuthModal";
 import Navbar from "../components/layout/LandingNav";
+import MasonryGallery from "../components/layout/Masonry";
 
 const LandingPage = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -19,8 +20,8 @@ const LandingPage = () => {
         }}
       />
 
-      <div className="flex-1 flex items-center justify-center text-3xl font-bold text-gray-600">
-        Welcome to Our Pinterest ✨
+      <div className="flex-1 overflow-y-auto p-6 bg-[#FFFFFF]">
+        <MasonryGallery />
       </div>
 
       {openModal && (
