@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "dev": "concurrently \"pnpm --filter client run dev\" \"pnpm --filter server run start:dev\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "prettier --write \"{client,server}/**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
