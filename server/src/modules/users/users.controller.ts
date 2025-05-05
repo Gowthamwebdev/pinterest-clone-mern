@@ -3,13 +3,18 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Put,
   UseGuards,
+  Body,
+  Request,
 } from '@nestjs/common';
 import { UserService } from './users.service';
 import { Public } from '../../shared/decorators/public.decorator';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -19,6 +24,8 @@ export class UserController {
     return this.userService.findUserById(id);
   }
 
-  @UseGuards(JwtAuthGuard)
-  async editUserDetails() {}
+  @Put()
+  async updateUser(@Body() updateUserDto: UpdateUserDto, @Request() req) {
+    return this.userService.updateUser(req.user.userId, updateUserDto);
+  }
 }

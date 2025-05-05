@@ -9,6 +9,8 @@ import {
 import { v2 as Cloudinary } from 'cloudinary';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { validateImage } from 'src/shared/utils/validate-image';
 
 interface CloudinaryUploadResult {
   secure_url: string;
@@ -17,7 +19,7 @@ interface CloudinaryUploadResult {
 }
 
 @Injectable()
-export class PinService {
+export class PostService {
   constructor(
     @Inject('CLOUDINARY') private cloudinary: typeof Cloudinary,
     private prisma: PrismaService,
@@ -46,29 +48,11 @@ export class PinService {
     body: CreatePostDto,
     image: Express.Multer.File,
   ) {
-    // Validate inputs
-    if (!image) {
-      throw new BadRequestException('Image is required');
-    }
+    // Validate image input
+    validateImage(image);
 
     if (!body?.title?.trim()) {
       throw new BadRequestException('Title is required');
-    }
-
-    if (image.size > 5 * 1024 * 1024) {
-      throw new BadRequestException('Image size exceeds 5MB limit');
-    }
-
-    const allowedMimeTypes = [
-      'image/jpeg',
-      'image/png',
-      'image/webp',
-      'image/gif',
-    ];
-    if (!allowedMimeTypes.includes(image.mimetype)) {
-      throw new BadRequestException(
-        'Invalid image type. Only JPEG, PNG, WEBP, and GIF are allowed',
-      );
     }
 
     try {
@@ -97,22 +81,36 @@ export class PinService {
     }
   }
 
-  async getAllPins() {
+  async getAllPosts() {
     try {
-      const pins = await this.prisma.pin.findMany({ take: 10 });
+      const pins = await this.prisma.pin.findMany({
+        where: { deleted_at: null },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_img: true,
+            },
+          },
+        },
+      });
       return pins;
     } catch (error) {
       throw new HttpException(
-        'Unexpected error occured',
-        HttpStatus.BAD_REQUEST,
+        'Failed to fetch pins',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async getPinById(pinId: number) {
+  async getPostById(pinId: number) {
     try {
       const pin = await this.prisma.pin.findUnique({
-        where: { id: pinId },
+        where: {
+          id: pinId,
+          deleted_at: null,
+        },
         include: {
           user: {
             select: {
@@ -128,7 +126,7 @@ export class PinService {
         throw new NotFoundException('Pin not found');
       }
 
-      const recommendations = await this.recommendPinsByTags(pin.tags, pin.id);
+      const recommendations = await this.recommendPostsByTags(pin.tags, pin.id);
 
       return {
         statusCode: 200,
@@ -146,15 +144,160 @@ export class PinService {
     }
   }
 
-  private async recommendPinsByTags(tags: string[], excludePin: number) {
+  async editPostById({
+    userId,
+    pinId,
+    updateData,
+  }: {
+    userId: number;
+    pinId: number;
+    updateData: UpdatePostDto;
+  }) {
     try {
-      if (!tags || tags.length === 0) return;
+      const pin = await this.prisma.pin.findUnique({
+        where: { id: pinId },
+      });
+
+      if (!pin) {
+        throw new NotFoundException('Pin not found');
+      }
+
+      if (pin.user_id !== userId) {
+        throw new HttpException(
+          'You are not authorized to edit this pin',
+          HttpStatus.FORBIDDEN,
+        );
+      }
+
+      if (!updateData.title && !updateData.description && !updateData.tags) {
+        throw new BadRequestException('At least one field must be updated');
+      }
+
+      await this.prisma.pin.update({
+        where: { id: pinId },
+        data: {
+          title: updateData.title,
+          description: updateData.description,
+          tags: updateData.tags ? updateData.tags.split(',') : undefined,
+          updated_at: new Date(),
+        },
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Pin updated successfully',
+      };
+    } catch (error) {
+      if (
+        error instanceof HttpException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
+      throw new HttpException(
+        'Failed to update pin',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async deletePostById({ pinId, userId }: { pinId: number; userId: number }) {
+    try {
+      const pin = await this.prisma.pin.findUnique({
+        where: { id: pinId },
+      });
+
+      if (!pin) {
+        throw new NotFoundException('Pin not found');
+      }
+
+      if (pin.user_id !== userId) {
+        throw new HttpException(
+          'You are not authorized to delete this pin',
+          HttpStatus.FORBIDDEN,
+        );
+      }
+
+      await this.prisma.pin.update({
+        where: { id: pinId },
+        data: {
+          deleted_at: new Date(),
+        },
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Pin deleted successfully',
+      };
+    } catch (error) {
+      if (
+        error instanceof HttpException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
+      throw new HttpException(
+        'Failed to delete pin',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async restorePostById({ pinId, userId }: { pinId: number; userId: number }) {
+    try {
+      const pin = await this.prisma.pin.findFirst({
+        where: {
+          id: pinId,
+          deleted_at: { not: null },
+        },
+      });
+
+      if (!pin) {
+        throw new NotFoundException('Deleted pin not found');
+      }
+
+      if (pin.user_id !== userId) {
+        throw new HttpException(
+          'You are not authorized to restore this pin',
+          HttpStatus.FORBIDDEN,
+        );
+      }
+
+      await this.prisma.pin.update({
+        where: { id: pinId },
+        data: {
+          deleted_at: null,
+        },
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Pin restored successfully',
+      };
+    } catch (error) {
+      if (
+        error instanceof HttpException ||
+        error instanceof NotFoundException
+      ) {
+        throw error;
+      }
+      throw new HttpException(
+        'Failed to restore pin',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  private async recommendPostsByTags(tags: string[], excludePin: number) {
+    try {
+      if (!tags || tags.length === 0) return [];
 
       const recommendedPins = await this.prisma.pin.findMany({
         where: {
           AND: [
             { tags: { hasSome: tags.map((tag) => tag.trim()) } },
             { id: { not: excludePin } },
+            { deleted_at: null },
           ],
         },
         take: 20,
@@ -162,14 +305,20 @@ export class PinService {
           id: true,
           title: true,
           image_url: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_img: true,
+            },
+          },
         },
       });
-
-      console.log('Recommended pins:', recommendedPins);
 
       return recommendedPins;
     } catch (error) {
       console.error('Failed to fetch recommended pins:', error);
+      return [];
     }
   }
 }
