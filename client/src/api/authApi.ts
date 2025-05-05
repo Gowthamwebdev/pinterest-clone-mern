@@ -19,7 +19,7 @@ export const userLoginApi = async ({ email, password }: { email: string; passwor
   try {
     const response = await apiClient.post('/auth/login', { email, password });
 
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw new Error('Invalid credentials');
     }
     return response.data;
