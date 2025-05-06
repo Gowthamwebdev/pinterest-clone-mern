@@ -3,32 +3,32 @@ import apiClient from './apiClient';
 
 const handleApiError = (error: any) => {
   if (error.response) {
-    
     return new Error(error.response.data.message || 'Something went wrong');
   } else if (error.request) {
-
     return new Error('No response from server');
   } else {
-    
     return new Error(error.message || 'An error occurred');
   }
 };
 
-
-export const userLoginApi = async ({ email, password }: { email: string; password: string }) => {
+export const userLoginApi = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
   try {
     const response = await apiClient.post('/auth/login', { email, password });
 
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw new Error('Invalid credentials');
     }
     return response.data;
-  
   } catch (error) {
     throw handleApiError(error);
   }
 };
-
 
 export const fetchUserProfileApi = async () => {
   try {
@@ -38,7 +38,6 @@ export const fetchUserProfileApi = async () => {
     throw handleApiError(error);
   }
 };
-
 
 export const userSignupApi = async (userData: userType) => {
   try {
@@ -53,10 +52,12 @@ export const userSignupApi = async (userData: userType) => {
   }
 };
 
-
 export const resetPasswordApi = async (email: string, newPassword: string) => {
   try {
-    const response = await apiClient.post('/auth/reset-password', { email, newPassword });
+    const response = await apiClient.post('/auth/reset-password', {
+      email,
+      newPassword,
+    });
 
     if (response.status !== 200) {
       throw new Error('Failed to reset password');

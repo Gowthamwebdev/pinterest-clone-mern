@@ -42,6 +42,7 @@ export class AuthService {
       };
       console.log(payload);
       return {
+        message: 'user logged in successfully',
         token: this.jwtService.sign(payload),
       };
     } catch (error) {

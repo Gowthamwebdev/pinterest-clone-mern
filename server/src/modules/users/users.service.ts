@@ -15,14 +15,26 @@ export class UserService {
   async findUserById(id: number) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        first_name: true,
+        last_name: true,
+        profile_img: true,
+        bio: true,
+        language: true,
+        region: true,
         created_pins: {
           where: { deleted_at: null },
           select: {
             id: true,
             title: true,
             description: true,
-            tags: true,
+            tags: {
+              select: {
+                slug: true,
+              },
+            },
             user_id: true,
           },
         },
@@ -62,6 +74,9 @@ export class UserService {
           first_name: updateData.first_name,
           last_name: updateData.last_name,
           bio: updateData.bio,
+          dob: updateData.dob,
+          language: updateData.language,
+          region: updateData.region,
           updated_at: new Date(),
         },
       });

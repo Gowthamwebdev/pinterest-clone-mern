@@ -20,7 +20,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { UpdatePostDto } from './dto/update-post.dto';
 
-@Controller('pins')
+@Controller('posts')
 @UseGuards(JwtAuthGuard)
 export class PostController {
   constructor(private postService: PostService) {}

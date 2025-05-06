@@ -10,13 +10,13 @@ import { v2 as Cloudinary } from 'cloudinary';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { validateImage } from 'src/shared/utils/validate-image';
-
-interface CloudinaryUploadResult {
-  secure_url: string;
-  public_id: string;
-  [key: string]: any;
-}
+import {
+  createSlug,
+  createTagArray,
+  validateImage,
+} from 'src/shared/utils/functions';
+import {} from 'src/shared/utils/constants';
+import { cloudinaryDto } from './dto/cloudinary.dto';
 
 @Injectable()
 export class PostService {
@@ -25,9 +25,7 @@ export class PostService {
     private prisma: PrismaService,
   ) {}
 
-  async uploadToCloudinary(
-    file: Express.Multer.File,
-  ): Promise<CloudinaryUploadResult> {
+  async uploadToCloudinary(file: Express.Multer.File): Promise<cloudinaryDto> {
     return new Promise((resolve, reject) => {
       const stream = this.cloudinary.uploader.upload_stream(
         { folder: 'pins' },
@@ -35,7 +33,7 @@ export class PostService {
           if (error) {
             reject(new Error(error.message || 'Cloudinary upload error'));
           } else {
-            resolve(result as CloudinaryUploadResult);
+            resolve(result as cloudinaryDto);
           }
         },
       );
@@ -58,13 +56,48 @@ export class PostService {
     try {
       const result = await this.uploadToCloudinary(image);
 
+      const tagNames = body.tags ? createTagArray(body.tags) : [];
+      console.log(tagNames);
+      if (tagNames.length > 15) {
+        throw new BadRequestException('Maximum 15 tags allowed');
+      }
+
       await this.prisma.pin.create({
         data: {
           title: body.title,
           description: body.description || null,
-          tags: body.tags ? body.tags.split(',') : [],
           image_url: result.secure_url,
           user_id: userId,
+          tags: {
+            connectOrCreate: tagNames.map((tagName) => {
+              return {
+                where: { name: tagName },
+                create: {
+                  name: tagName,
+                  slug: createSlug(tagName),
+                  created_by: {
+                    connect: { id: userId },
+                  },
+                },
+              };
+            }),
+          },
+        },
+        include: {
+          tags: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_img: true,
+            },
+          },
         },
       });
 
@@ -73,9 +106,8 @@ export class PostService {
         message: 'Pin created successfully',
       };
     } catch (error) {
-      console.error('Error creating pin:', error);
       throw new HttpException(
-        error.message || 'Failed to create pin',
+        'Failed to create pin',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -97,6 +129,7 @@ export class PostService {
       });
       return pins;
     } catch (error) {
+      console.error('Error creating pin:', error);
       throw new HttpException(
         'Failed to fetch pins',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -119,6 +152,12 @@ export class PostService {
               profile_img: true,
             },
           },
+          tags: {
+            select: {
+              name: true,
+              slug: true,
+            },
+          },
         },
       });
 
@@ -126,24 +165,35 @@ export class PostService {
         throw new NotFoundException('Pin not found');
       }
 
-      const recommendations = await this.recommendPostsByTags(pin.tags, pin.id);
+      const tagNames = pin.tags.map((tag) => tag.name);
+      const recommendations = await this.recommendPostsByTags(tagNames, pin.id);
 
       return {
         statusCode: 200,
         message: 'Pin fetched successfully',
         data: {
-          currentPin: pin,
+          currentPin: {
+            ...pin,
+            tags: pin.tags.map((tag) => ({
+              // id: tag.id,
+              name: tag.name,
+              slug: tag.slug,
+            })),
+          },
           recommendedPins: recommendations,
         },
       };
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(`Error fetching pin ${pinId}:`, error);
       throw new HttpException(
-        'Failed to fetch pin',
+        error.message || 'Failed to fetch pin',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
-
   async editPostById({
     userId,
     pinId,
@@ -173,13 +223,29 @@ export class PostService {
         throw new BadRequestException('At least one field must be updated');
       }
 
+      const tagNames = updateData.tags
+        ? createTagArray(updateData.tags)
+        : undefined;
+
       await this.prisma.pin.update({
         where: { id: pinId },
         data: {
           title: updateData.title,
           description: updateData.description,
-          tags: updateData.tags ? updateData.tags.split(',') : undefined,
           updated_at: new Date(),
+          ...(tagNames && {
+            tags: {
+              set: [],
+              connectOrCreate: tagNames.map((tagName) => ({
+                where: { name: tagName },
+                create: {
+                  name: tagName,
+                  slug: createSlug(tagName),
+                  created_by: { connect: { id: userId } },
+                },
+              })),
+            },
+          }),
         },
       });
 
@@ -295,22 +361,21 @@ export class PostService {
       const recommendedPins = await this.prisma.pin.findMany({
         where: {
           AND: [
-            { tags: { hasSome: tags.map((tag) => tag.trim()) } },
+            { tags: { some: { name: { in: tags } } } },
             { id: { not: excludePin } },
             { deleted_at: null },
           ],
         },
+        orderBy: {
+          tags: {
+            _count: 'desc',
+          },
+        },
         take: 20,
-        select: {
-          id: true,
-          title: true,
-          image_url: true,
-          user: {
-            select: {
-              id: true,
-              name: true,
-              profile_img: true,
-            },
+        include: {
+          user: {},
+          tags: {
+            select: { name: true },
           },
         },
       });

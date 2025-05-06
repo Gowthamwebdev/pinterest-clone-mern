@@ -14,18 +14,20 @@ model user {
   first_name  String?   @db.VarChar(50)
   last_name   String?   @db.VarChar(50)
   email       String    @unique @db.VarChar(255)
-  password    String    // Should be hashed before storage
+  password    String    
   profile_img String?   @db.VarChar(512)
   dob         DateTime? @db.Date
   bio         String?
   created_at  DateTime  @default(now())
   updated_at  DateTime?
   deleted_at  DateTime?
-  
-  created_pins pin[]    @relation("createdPins")
-  
-  saved_pins   saved_pin[] @relation("userSavedPins")
-  
+  language    String?   @default("en")
+  region      String    @default("global")
+
+  created_pins pin[]       @relation("createdPins")
+  created_tags tag[]       @relation("UserCreatedTags")
+  saved_pins   saved_pin[] @relation("SavedPins")
+
   @@map("users")
 }
 
@@ -34,32 +36,47 @@ model pin {
   title       String    @db.VarChar(200)
   description String?   @db.Text
   image_url   String    @db.VarChar(512)
-  tags        String[]  
+  tags        tag[]     @relation("PinTags")
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
   deleted_at  DateTime?
-  
-  user_id     Int
-  user        user      @relation("createdPins", fields: [user_id], references: [id])
-  
-  saved_by    saved_pin[] @relation("pinSavedByUsers")
-  
+
+  user_id Int
+  user    user @relation("createdPins", fields: [user_id], references: [id])
+
+  saved_by saved_pin[] @relation("pinSavedByUsers")
+
   @@index([user_id])
   @@index([created_at])
   @@map("pins")
+}
+
+model tag {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique @db.VarChar(100)
+  slug       String    @unique @db.VarChar(100)
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+
+  pins          pin[] @relation("PinTags")
+  created_by    user  @relation("UserCreatedTags", fields: [created_by_id], references: [id])
+  created_by_id Int
+
+  @@index([name])
+  @@index([slug])
+  @@map("tags")
 }
 
 model saved_pin {
   user_id    Int
   pin_id     Int
   created_at DateTime @default(now())
-  
-  user       user     @relation("userSavedPins", fields: [user_id], references: [id])
-  
-  pin        pin      @relation("pinSavedByUsers", fields: [pin_id], references: [id])
-  
+
+  user user @relation("SavedPins", fields: [user_id], references: [id])
+
+  pin pin @relation("pinSavedByUsers", fields: [pin_id], references: [id])
+
   @@id([user_id, pin_id])
-  
   @@index([created_at])
   @@map("saved_pins")
 }
