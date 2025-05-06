@@ -1,20 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import Cookies from 'js-cookie';
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { userLoginApi } from "../api/authApi";
-import { useAuthStore } from "../stores/AuthStore";
 import { loginSchema } from "./Validations/loginSchema";
+import { useUserStore } from '../stores/userStore/userStore';
+import { useAuthStore } from '../stores/AuthStore';
+import Cookies from 'js-cookie';
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  const[email,setEmail]= useState("");
-  const[password, setPassword]=useState("");
   const { setAccessToken, setIsAuthenticated } = useAuthStore();
-
+  const { email, setEmail, password, setPassword } = useUserStore();
+    
   const {
     register,
     handleSubmit,
@@ -75,7 +75,7 @@ const LoginForm: React.FC = () => {
       Forgot your password?
       </h1>
       </Link>
-    
+
       <Button
         fullWidth
         variant="contained"
@@ -90,7 +90,6 @@ const LoginForm: React.FC = () => {
 >
 {loading ? "Logging in..." : "Login"}
 </Button>
-
     </Box>
   );
 };

@@ -6,7 +6,6 @@ import { useAuthStore } from "./stores/AuthStore";
 
 function App() {
   const { setIsAuthenticated, setAccessToken } = useAuthStore();
-
   useEffect(() => {
     const token = Cookies.get("token");
 

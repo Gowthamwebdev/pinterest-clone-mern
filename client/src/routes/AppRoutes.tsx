@@ -25,7 +25,7 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/password/reset" element={<ResetPasswordForm />} />
+        <Route path="password/reset" element={<ResetPasswordForm />} />
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />

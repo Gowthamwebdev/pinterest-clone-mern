@@ -9,7 +9,6 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { isAuthenticated, resetAuth } = useAuthStore();
   const { openModal }=useAuthStore();
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
