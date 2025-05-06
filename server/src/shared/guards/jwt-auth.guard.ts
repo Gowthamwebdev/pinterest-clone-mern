@@ -7,6 +7,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../utils/constants';
 
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
@@ -30,14 +31,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (info && info.message === 'No auth token') {
       throw new UnauthorizedException('No token provided');
     }
-
     if (err || !user) {
       throw err || new UnauthorizedException('Invalid or expired token');
     }
 
     const request = context.switchToHttp().getRequest();
     request.user = user;
-
     return user;
   }
 }
+

@@ -58,7 +58,7 @@ export const resetPasswordApi = async (email: string, newPassword: string) => {
   try {
     const response = await apiClient.post('/auth/reset-password', { email, newPassword });
 
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       throw new Error('Failed to reset password');
     }
 
