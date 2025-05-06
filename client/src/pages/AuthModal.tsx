@@ -28,7 +28,7 @@ return (
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.9 }}
-            className="bg-white p-8 w-[360px] rounded-2xl shadow-lg text-center relative"
+            className="bg-white p-8 w-[280px] rounded-2xl shadow-lg text-center relative"
         >
             <button
             onClick={onClose}
