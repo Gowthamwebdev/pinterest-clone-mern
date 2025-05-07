@@ -117,12 +117,23 @@ export class PostService {
     try {
       const pins = await this.prisma.pin.findMany({
         where: { deleted_at: null },
-        include: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          image_url: true,
           user: {
             select: {
               id: true,
               name: true,
               profile_img: true,
+            },
+          },
+          tags: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
             },
           },
         },
@@ -384,6 +395,60 @@ export class PostService {
     } catch (error) {
       console.error('Failed to fetch recommended pins:', error);
       return [];
+    }
+  }
+
+  async searchPinsByTag(tagQuery: string) {
+    if (!tagQuery || !tagQuery.trim()) {
+      throw new BadRequestException('Search query is required');
+    }
+
+    const searchTerm = tagQuery.toLowerCase().trim();
+    console.log(searchTerm);
+    try {
+      const pins = await this.prisma.pin.findMany({
+        where: {
+          deleted_at: null, // is_deleted
+          tags: {
+            some: {
+              slug: {
+                contains: tagQuery,
+                mode: 'insensitive',
+              },
+            },
+          },
+        },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              profile_img: true,
+            },
+          },
+          tags: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+        orderBy: {
+          created_at: 'desc',
+        },
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Pins fetched successfully',
+        data: pins,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Search failed',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

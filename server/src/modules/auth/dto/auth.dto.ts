@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, MinLength, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength, IsDateString } from 'class-validator';
 
 export class SignupDto {
   @IsEmail()
@@ -9,19 +9,14 @@ export class SignupDto {
   @IsNotEmpty()
   password: string;
 
-  @Matches(/^\d{2}-\d{2}-\d{4}$/, {
-    message: 'dob must be in DD-MM-YYYY format'
-  })
   @IsNotEmpty()
+  @IsDateString()
   dateOfBirth: string;
-
 }
 
 export class LoginDto {
-
-
   id: number;
-  
+
   @IsEmail()
   email: string;
 

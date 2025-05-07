@@ -101,12 +101,8 @@ export class AuthService {
       };
     } catch (error) {
       throw new HttpException(
-        {
-          statusCode: error.status || HttpStatus.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Unexpected error occurred',
-          error: error.response?.error || 'Internal Server Error',
-        },
-        error.status || HttpStatus.INTERNAL_SERVER_ERROR,
+        'Unexpected error occurred',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

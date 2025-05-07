@@ -14,7 +14,7 @@ model user {
   first_name  String?   @db.VarChar(50)
   last_name   String?   @db.VarChar(50)
   email       String    @unique @db.VarChar(255)
-  password    String    
+  password    String
   profile_img String?   @db.VarChar(512)
   dob         DateTime? @db.Date
   bio         String?
@@ -27,6 +27,7 @@ model user {
   created_pins pin[]       @relation("createdPins")
   created_tags tag[]       @relation("UserCreatedTags")
   saved_pins   saved_pin[] @relation("SavedPins")
+  user_tags    user_tags[]
 
   @@map("users")
 }
@@ -39,12 +40,13 @@ model pin {
   tags        tag[]     @relation("PinTags")
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
-  deleted_at  DateTime?
+  deleted_at  DateTime? //is_deleted
 
   user_id Int
   user    user @relation("createdPins", fields: [user_id], references: [id])
 
   saved_by saved_pin[] @relation("pinSavedByUsers")
+  pin_tags pin_tags[]
 
   @@index([user_id])
   @@index([created_at])
@@ -58,9 +60,11 @@ model tag {
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 
-  pins          pin[] @relation("PinTags")
-  created_by    user  @relation("UserCreatedTags", fields: [created_by_id], references: [id])
+  pins          pin[]       @relation("PinTags")
+  created_by    user        @relation("UserCreatedTags", fields: [created_by_id], references: [id])
   created_by_id Int
+  user_tags     user_tags[]
+  pin_tags      pin_tags[]
 
   @@index([name])
   @@index([slug])
@@ -79,4 +83,26 @@ model saved_pin {
   @@id([user_id, pin_id])
   @@index([created_at])
   @@map("saved_pins")
+}
+
+model user_tags {
+  user_id Int
+  tag_id  Int
+
+  user user @relation(fields: [user_id], references: [id])
+  tag  tag  @relation(fields: [tag_id], references: [id])
+
+  @@id([user_id, tag_id])
+  @@map("user_tags")
+}
+
+model pin_tags {
+  pin_id Int
+  tag_id Int
+
+  pin pin @relation(fields: [pin_id], references: [id])
+  tag tag @relation(fields: [tag_id], references: [id])
+
+  @@id([pin_id, tag_id])
+  @@map("pin_tags")
 }

@@ -13,12 +13,16 @@ import {
   UsePipes,
   ValidationPipe,
   Delete,
+  Query,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/shared/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { SearchQueryDto } from './dto/search-query.dto';
 
 @Controller('posts')
 @UseGuards(JwtAuthGuard)
@@ -39,6 +43,12 @@ export class PostController {
   @Get()
   async getAllPosts() {
     return await this.postService.getAllPosts();
+  }
+
+  @Get('search/')
+  async searchPinsByTag(@Query() queryDto: SearchQueryDto) {
+    console.log(queryDto.query);
+    return this.postService.searchPinsByTag(queryDto.query);
   }
 
   @Get(':pinId')
