@@ -17,7 +17,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ onClose, defaultType }) => {
 
 return (
     <div className="fixed inset-0 backdrop-blur-md bg-white/30 flex items-center justify-center">
-    <div className="bg-white p-2 rounded-lg shadow-lg">
+    <div className="w-[230] h-[280] bg-white p-2 rounded-lg shadow-lg">
         <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

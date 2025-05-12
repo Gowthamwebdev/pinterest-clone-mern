@@ -18,9 +18,9 @@ interface PinStore {
   board: string;
   imgUrl: string;
   addPin: (pin: Pin) => void;
-  addPins: (newPins: Pin[]) => void;  // ✅ New: Add multiple pins
-  clearPins: () => void;              // ✅ New: Clear all pins
-  filterPinsByCategory: (category: string) => Pin[]; // ✅ Updated: Return filtered list
+  addPins: (newPins: Pin[]) => void;
+  clearPins: () => void;
+  filterPinsByCategory: (category: string) => Pin[];
   setTitle: (title: string) => void;
   setDesc: (desc: string) => void;
   setTags: (tags: string) => void;
@@ -39,13 +39,11 @@ export const usePinStore = create<PinStore>((set) => ({
 
   addPin: (pin) => set((state) => ({ pins: [...state.pins, pin] })),
 
-  addPins: (newPins) => set((state) => ({ pins: [...state.pins, ...newPins] })), // ✅ Efficient Infinite Scrolling
-
-  clearPins: () => set({ pins: [] }), // ✅ Efficient Clearing
-
+  addPins: (newPins) => set((state) => ({ pins: [...state.pins, ...newPins] })),
+  clearPins: () => set({ pins: [] }),
   filterPinsByCategory: (category) => {
     const pins = usePinStore.getState().pins;
-    return pins.filter((pin) => pin.tags.includes(category)); // ✅ Filtered list without changing state
+    return pins.filter((pin) => pin.tags.includes(category));
   },
 
   setTitle: (title) => set({ title }),

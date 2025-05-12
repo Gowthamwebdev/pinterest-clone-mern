@@ -1,8 +1,4 @@
-// export const realImages = Array.from({ length: 100 }, (_, index) => ({
-//     url: `https://picsum.photos/id/${Math.floor(Math.random() * 500)}/500/600`, // ✅ Random image every reload
-//     genre: ["Minimalism", "Abstract", "Nature", "Cityscape", "Street Photography", "Moody", "Retro", "Sunset", "Beach", "Mountains"][Math.floor(Math.random() * 10)], // ✅ Random genre
-//     suggestedText: ["Elegant simplicity", "Bold expressions", "Dreamy landscapes", "Urban vibes", "Capturing raw moments"][Math.floor(Math.random() * 5)] // ✅ Random suggested text
-//   }));
+
 export const realImages = Array.from({ length: 100 }, (_, index) => {
   const id = Math.floor(Math.random() * 500);
   const width = Math.floor(Math.random() * (800 - 300) + 300);

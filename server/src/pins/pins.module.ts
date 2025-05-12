@@ -5,6 +5,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule } from '@nestjs/config';
 import { CloudinaryProvider } from 'src/config/cloudinary.provider';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Express } from "express";
+
 
 @Module({
   imports: [

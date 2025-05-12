@@ -5,13 +5,15 @@ import { Link } from "react-router-dom";
 import { Bookmark, Share, MoreHoriz, Download, Search } from "@mui/icons-material";
 import pinterestSvg from "../../../public/pinterest.svg";
 import { realImages } from "./image";
+import { useNavigate } from "react-router-dom";
 
 
 
 const MasonryGallery: React.FC = () => {
     const [savedImages, setSavedImages] = useState<string[]>([]);
     const [anchorEl, setAnchorEl] = useState<{ [key: string]: HTMLElement | null }>({});
-
+    
+    const navigate = useNavigate();
     const handleSave = (url: string) => {
     setSavedImages((prev) => (prev.includes(url) ? prev.filter((img) => img !== url) : [...prev, url]));
     };
@@ -62,8 +64,8 @@ return (
     <button
         className="bg-light-gray bg-opacity-20 text-white text-xs px-2 py-1 rounded-full"
         onClick={(e) => {
-        e.stopPropagation(); 
-        handleDownload(url);
+        e.stopPropagation();
+        
         }}
     >
     Open
@@ -130,7 +132,7 @@ return (
     onClose={() => handleMenuClose(url)}
     anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     transformOrigin={{ vertical: "top", horizontal: "right" }}
-    sx={{ "& .MuiPaper-root": { minWidth: "60px",minHeight:"30px", padding: "2px 2px" } }} // Shrinks menu
+    sx={{ "& .MuiPaper-root": { minWidth: "60px",minHeight:"30px", padding: "2px 2px" } }}
     >
     <MenuItem onClick={() => handleSave(url)} sx={{ fontSize: "12px", padding: "6px 12px" }}>
     <Bookmark sx={{ color: savedImages.includes(url) ? "green" : "gray", fontSize: "16px" }} />

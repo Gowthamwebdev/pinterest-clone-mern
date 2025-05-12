@@ -20,7 +20,7 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-between px-4 py-2 bg-white shadow sticky top-0">
+    <div className="w-full flex items-center justify-between px-4 py-2 bg-white sticky top-0">
       <div className="flex items-center gap-4">
         <img src={pinterestSvg} alt="Pinterest Logo" className="w-5 h-5" />
         <span className="text-sm font-bold text-[#e60023]">Pinterest</span>
@@ -33,7 +33,6 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
           Explore
         </Button>
 
-        {/* Search Bar Component */}
         <PinterestSearchBar
           suggestedText={suggestedSearches}
           onSearch={handleSearch}
@@ -42,7 +41,6 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
 
       {error && <p style={{ color: "red", fontSize: "12px" }}>{error}</p>}
 
-      {/* Display Search Results */}
       {results.length > 0 && (
         <div className="grid grid-cols-3 gap-2 mt-3">
           {results.map((img) => (
@@ -52,10 +50,10 @@ const Navbar = ({ onLoginClick, onSignupClick }) => {
       )}
 
       <div className="flex items-center gap-2">
-        <Button onClick={onLoginClick} sx={{ backgroundColor: "#e60023", color: "white", borderRadius: "30px", fontWeight: "bold", textTransform: "none", padding: "6px 10px" }}>
-          Login
+        <Button onClick={onLoginClick} sx={{fontSize:"11px",backgroundColor: "#e60023", color: "white", borderRadius: "30px", fontWeight: "semibold", textTransform: "none", padding: "1px 1py" }}>
+          Log in
         </Button>
-        <Button onClick={onSignupClick} sx={{ backgroundColor: "#e6e6e6", color: "black", borderRadius: "30px", fontWeight: "bold", textTransform: "none", padding: "6px 10px" }}>
+        <Button onClick={onSignupClick} sx={{fontSize:"11px",backgroundColor: "#e6e6e6", color: "black", borderRadius: "30px", fontWeight: "semibold", textTransform: "none", padding: "1px 1py" }}>
           Sign up
         </Button>
       </div>
