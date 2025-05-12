@@ -68,3 +68,20 @@ export const resetPasswordApi = async (email: string, newPassword: string) => {
     throw handleApiError(error);
   }
 };
+
+export const fetchPins = async (page: number = 1, limit: number = 10) => {
+  try {
+    const response = await apiClient.get(`?page=${page}&limit=${limit}`);
+    return response.data.pins;
+  } catch (error) {
+    console.error("Error fetching pins:", error);
+    throw error;
+  }
+};
+
+export const API = apiClient.create({
+  baseURL: "https://api.example.com",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});

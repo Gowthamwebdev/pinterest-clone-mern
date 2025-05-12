@@ -25,8 +25,10 @@ const AppRoutes = () => {
     <Routes>
       <Route element={<PublicRoute />}>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/password/reset" element={<ResetPasswordForm />} />
+        <Route path="password/reset" element={<ResetPasswordForm />} />
+        <Route path="/Explore" element={<Explore/>}/>
       </Route>
+
       <Route element={<ProtectedRoute />}>
         <Route path="/home" element={<Home />} />
         <Route path="/today" element={<Explore />} />
@@ -34,7 +36,9 @@ const AppRoutes = () => {
         <Route path="/pin-creation-tool" element={<CreatePost />} />
         <Route path="/messages" element={<Home />} />
         <Route path="/" element={<MasonryGallery />} />
+       
         <Route path="/category/:genre" element={<Categories />} />
+        
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

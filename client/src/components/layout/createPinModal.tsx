@@ -13,7 +13,6 @@ const CreatePinModal = () => {
   const handleSubmit = () => {
     const newPin = { id: Date.now().toString(), imgUrl, title, desc, tags, board };
     addPin(newPin);
-    // Reset form fields
     setTitle("");
     setDesc("");
     setImgUrl("");

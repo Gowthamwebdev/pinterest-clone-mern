@@ -1,6 +1,6 @@
 import { usePinStore } from "../stores/pinStore";
 import { useState } from "react";
-import CreatePinModal from "../components/layout/createPinModal";
+import CreatePost from "./CreatePost";
 import Categories from "../components/layout/Categories";
 
 const HomePage = () => {
@@ -30,7 +30,7 @@ const HomePage = () => {
       {isOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-xl w-full">
-            <CreatePinModal />
+            <CreatePost />
             <button
               onClick={() => setIsOpen(false)}
               className="mt-4 text-sm text-gray-600 hover:text-red-500"

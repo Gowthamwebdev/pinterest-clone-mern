@@ -71,7 +71,7 @@ const LoginForm: React.FC = () => {
       </Typography>
       
       <Link to="password/reset" className="text-black normal-case hover:underline">
-      <h1 className="text-sm text-black hover:underline flex justify-start">
+      <h1 className="text-sm  text-black hover:underline flex justify-start">
       Forgot your password?
       </h1>
       </Link>
