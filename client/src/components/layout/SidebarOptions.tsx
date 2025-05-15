@@ -5,7 +5,7 @@ const SidebarOptions = ({ setSetting }: { setSetting: (val: boolean) => void }) 
   const ref = useRef<HTMLDivElement>(null);
   const [fadeOut, setFadeOut] = useState(false);
 
-  // Outside click logic
+ 
   useEffect(() => { 
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {

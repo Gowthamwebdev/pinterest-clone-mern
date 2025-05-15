@@ -37,46 +37,45 @@ const PinterestSearchBar = () => {
     };
 
     return (
-        <div className="relative w-full max-w-lg">
-    <div className="flex items-center bg-[#f5f5f5] px-5 py-1 rounded-full border border-gray-300 focus-within:border-blue-500 transition duration-200 z-50 relative hover:bg-gray-100">
-        <Search className="text-gray-500" fontSize="small" />
-        <InputBase
-            fullWidth
-            placeholder="Search for easy dinners, fashion, etc."
-            value={localQuery}
-            onChange={(e) => setLocalQuery(e.target.value)}
-            onFocus={() => setIsDropdownVisible(true)}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch(localQuery)}
-            sx={{ fontSize: 12, textAlign: "left", height: "2px", marginInlineEnd: "110px" }}
-        />
-        {localQuery && (
-            <IconButton onClick={handleClearSearch} size="small">
-                <Close fontSize="small" />
-            </IconButton>
-        )}
-    </div>
+        <div className="relative w-full max-w-xl">
+            <div className="flex items-center bg-[#f5f5f5] px-4 py-3 rounded-full border border-gray-300 focus-within:border-blue-500 transition duration-200 z-50 relative hover:bg-gray-100">
+                <Search className="text-gray-500" fontSize="medium" />
+                <InputBase
+                    fullWidth
+                    placeholder="Search for easy dinners, fashion, etc."
+                    value={localQuery}
+                    onChange={(e) => setLocalQuery(e.target.value)}
+                    onFocus={() => setIsDropdownVisible(true)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch(localQuery)}
+                    sx={{ fontSize: 16, textAlign: "left", height: "2rem", marginInlineEnd: "110px" }}
+                />
+                {localQuery && (
+                    <IconButton onClick={handleClearSearch} size="medium">
+                        <Close fontSize="medium" />
+                    </IconButton>
+                )}
+            </div>
 
-    {isDropdownVisible && (
-        <div className="absolute w-full mt-1 bg-white shadow-lg rounded-md overflow-hidden z-50">
-            <List>
-                {suggestions.map((item, index) => (
-                    <ListItem
-                        key={index}
-                        onClick={() => {
-                            setLocalQuery(item);
-                            handleSearch(item);
-                        }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100"
-                    >
-                        <Search fontSize="small" className="text-gray-500 mr-2" />
-                        {item}
-                    </ListItem>
-                ))}
-            </List>
+            {isDropdownVisible && (
+                <div className="absolute w-full mt-2 bg-white shadow-lg rounded-md overflow-hidden z-50">
+                    <List>
+                        {suggestions.map((item, index) => (
+                            <ListItem
+                                key={index}
+                                onClick={() => {
+                                    setLocalQuery(item);
+                                    handleSearch(item);
+                                }}
+                                className="px-4 py-3 text-md cursor-pointer hover:bg-gray-100"
+                            >
+                                <Search fontSize="small" className="text-gray-500 mr-2" />
+                                {item}
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            )}
         </div>
-    )}
-</div>
-
     );
 };
 

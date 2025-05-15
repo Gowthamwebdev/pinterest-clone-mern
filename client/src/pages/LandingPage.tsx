@@ -1,34 +1,30 @@
-import { useState } from "react";
-import AuthModal from "./AuthModal";
-import Navbar from "../components/layout/LandingNav";
-import MasonryGallery from "../components/layout/Masonry";
+import { useState } from 'react';
+import Navbar from '../components/layout/LandingNav';
+import AuthModal from '../pages/auth/AuthModal';
 
 const LandingPage = () => {
   const [openModal, setOpenModal] = useState(false);
-  const [authType, setAuthType] = useState<"login" | "signup">("login");
+  const [authType, setAuthType] = useState<'login' | 'signup'>('login');
 
   return (
     <div className="flex flex-col h-screen">
       <Navbar
         onLoginClick={() => {
-          setAuthType("login");
+          setAuthType('login');
           setOpenModal(true);
         }}
         onSignupClick={() => {
-          setAuthType("signup");
+          setAuthType('signup');
           setOpenModal(true);
         }}
       />
 
-      <div className="flex-1 overflow-y-auto p-6 bg-[#FFFFFF]">
-        <MasonryGallery />
+      <div className="flex-1 flex items-center justify-center text-3xl font-bold text-gray-600">
+        Welcome to Our Pinterest ✨
       </div>
 
       {openModal && (
-        <AuthModal
-          onClose={() => setOpenModal(false)}
-          defaultType={authType}
-        />
+        <AuthModal onClose={() => setOpenModal(false)} defaultType={authType} />
       )}
     </div>
   );

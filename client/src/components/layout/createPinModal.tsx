@@ -1,70 +1,91 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { usePinStore } from "../../stores/pinStore";
+import { TextField, Button, Box } from "@mui/material";
+import { Description } from "@mui/icons-material";
 
 const CreatePinModal = () => {
-  const [title, setTitle] = useState("");
-  const [desc, setDesc] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
-  const [tags, setTags] = useState("");
-  const [board, setBoard] = useState("");
-  
+  const titleRef = useRef<HTMLInputElement>(null);
+  const descRef = useRef<HTMLTextAreaElement>(null);
+  const imgUrlRef = useRef<HTMLInputElement>(null);
+  const tagsRef = useRef<HTMLInputElement>(null);
+  const boardRef = useRef<HTMLInputElement>(null);
+
+
   const { addPin } = usePinStore();
 
   const handleSubmit = () => {
-    const newPin = { id: Date.now().toString(), imgUrl, title, desc, tags, board };
-    addPin(newPin);
-    setTitle("");
-    setDesc("");
-    setImgUrl("");
-    setTags("");
-    setBoard("");
+  if (!titleRef.current || !descRef.current || !imgUrlRef.current || !tagsRef.current || !boardRef.current) {
+    return;
+  }
+
+  const newPin = {
+    id: Date.now().toString(),
+    imgUrl: imgUrlRef.current.value,
+    title: titleRef.current.value,
+    desc: descRef.current.value,
+    tags: tagsRef.current.value,
+    board: boardRef.current.value,
   };
 
+  addPin(newPin);
+
+  titleRef.current.value = "";
+  descRef.current.value = "";
+  imgUrlRef.current.value = "";
+  tagsRef.current.value = "";
+  boardRef.current.value = "";
+};
+
+
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          placeholder="Pin Title"
+    <Box sx={{ p: 2 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <TextField
+          label="Pin Title"
+          variant="outlined"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 w-full mb-2"
+          fullWidth
         />
-        <textarea
-          placeholder="Pin Description"
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          className="border p-2 w-full mb-2"
+        <TextField
+          label="Pin Description"
+          variant="outlined"
+          value={Description}
+          onChange={(e) => setDescription(e.target.value)}
+          fullWidth
+          multiline
         />
-        <input
-          type="text"
-          placeholder="Image URL"
+        <TextField
+          label="Image URL"
+          variant="outlined"
           value={imgUrl}
           onChange={(e) => setImgUrl(e.target.value)}
-          className="border p-2 w-full mb-2"
+          fullWidth
         />
-        <input
-          type="text"
-          placeholder="Tags"
+        <TextField
+          label="Tags"
+          variant="outlined"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          className="border p-2 w-full mb-2"
+          fullWidth
         />
-        <input
-          type="text"
-          placeholder="Board Name"
+        <TextField
+          label="Board Name"
+          variant="outlined"
           value={board}
           onChange={(e) => setBoard(e.target.value)}
-          className="border p-2 w-full mb-2"
+          fullWidth
         />
-      </div>
-      <button
+      </Box>
+      <Button
         onClick={handleSubmit}
-        className="bg-blue-500 text-white p-2 rounded"
+        variant="contained"
+        color="primary"
+        sx={{ mt: 2 }}
       >
         Create Pin
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
 
